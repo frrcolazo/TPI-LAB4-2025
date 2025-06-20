@@ -21,9 +21,24 @@ comando de instalación en linux:
 ```bash
 curl -sSL https://install.python-poetry.org | python3 -
 ```
-comando de instalación en windows:
+comando de instalación en windows powershell:
 ```bash
 (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -
+```
+
+comando para agregar al path poetry en windows powershell:
+
+- recuerda cambiar el usuario en la ruta
+
+```bash
+[Environment]::SetEnvironmentVariable("Path", [Environment]::GetEnvironmentVariable("Path", "User") + ";C:\Users\TU_USARIO_AQUÍ\AppData\Roaming\Python\Scripts", "User")
+```
+
+comando para agregar al path poetry en linux:
+
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
 ```
 
 ## Instalación
@@ -39,3 +54,4 @@ En desarrollo:
 ```bash
 uvicorn main:app --reload
 ```
+
