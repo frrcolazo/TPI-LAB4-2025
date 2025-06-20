@@ -1,5 +1,5 @@
 
-# Proyecto Web con FastAPI + MySQL + Bootstrap
+# Sistema de gestión de viajes
 
 Este es un proyecto full-stack usando:
 
