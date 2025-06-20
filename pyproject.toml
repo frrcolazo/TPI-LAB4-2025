@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "Sistema de gestion de viajes"
+version = "0.1.0"
+description = "App web con FastAPI, MySQL y Bootstrap"
+authors = ["Benjamín Peralta", "Fernando Colazo", "German Sosa", "Juan Rusconi"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.13.*"
+fastapi = "0.115.13"
+uvicorn = "0.34.3"
+sqlalchemy = "2.0.41"
+mysql-connector-python = "9.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
