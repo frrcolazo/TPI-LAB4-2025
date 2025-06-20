@@ -17,9 +17,15 @@ Este es un proyecto full-stack usando:
 - Tener **Python 3.13**
 - Instalar **Poetry**
 
+comando de instalación en linux:
 ```bash
 curl -sSL https://install.python-poetry.org | python3 -
 ```
+comando de instalación en windows:
+```bash
+(Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -
+```
+
 ## Instalación
 ```bash
 git clone https://github.com/tu_usuario/tu_proyecto.git
