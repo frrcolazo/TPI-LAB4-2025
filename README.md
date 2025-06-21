@@ -9,6 +9,7 @@ Este es un proyecto full-stack usando:
 - **SQLAlchemy** (v2.0.41)
 - **mysql-connector-python** (v9.3.0)
 - **Bootstrap**, **HTML**, **CSS**, y **JavaScript**
+- **pydantic[email]**, **passlib[bcrypt]**, **python-multipart**, **PyJWT**
 
 ---
 
