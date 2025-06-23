@@ -67,7 +67,7 @@ def get_usuario(id: int = Path(ge=1, le=2000), db = Depends(get_database_session
     #db = Session()
     result = UsuariosService(db).get_usuario(id)
     if not result:
-        return JSONResponse(status_code=404, content={'message': "No encontrado"})
+        return JSONResponse(status_code=404, content={'message': "Usuario no encontrado"})
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
 
@@ -75,6 +75,8 @@ def get_usuario(id: int = Path(ge=1, le=2000), db = Depends(get_database_session
 def get_usuarios_by_mail(email: str = Query(min_length=5, max_length=35), db = Depends(get_database_session)) :
     #db = Session()
     result = UsuariosService(db).get_usuarios_by_mail(email)
+    if not result:
+        return JSONResponse(status_code=404, content={'message': "Email del usuario no encontrado"})
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
 
@@ -111,28 +113,3 @@ def delete_usuarios(id: int, db = Depends(get_database_session))-> dict:
         return JSONResponse(status_code=404, content={"message": "No se encontró"})
     UsuariosService(db).delete_usuarios(id)
     return JSONResponse(status_code=200, content={"message": "Se ha eliminado el usuario"})
-
-@usuarios_router.put('/usuarios/subir_foto/{id}', tags=['Usuarios'],response_model=dict,status_code=200)
-def subir_foto(id: int = Path(ge=1, le=2000), file:UploadFile=File(description="Ingrese una foto"),db = Depends(get_database_session)):
-    result = UsuariosService(db).get_usuario(id)
-    if not result:
-        return JSONResponse(status_code=404, content={'message': "No encontrado"})
-    upload_folder = "fotos/usuarios"
-    os.makedirs(upload_folder, exist_ok=True)
-
-    file_path = os.path.join(upload_folder, f"usuario_{id}_{file.filename}")
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-    
-    UsuariosService(db).subir_foto_usuario(id,file_path)
-
-    return JSONResponse(status_code=200, content={"message": "Se ha subido la foto"})
-
-@usuarios_router.put('/usuarios/bajar_foto/{id}', tags=['Usuarios'],response_model=dict,status_code=200)
-def bajar_foto(id: int = Path(ge=1, le=2000),db = Depends(get_database_session)):
-    result = UsuariosService(db).get_usuario(id)
-    if not result:
-        return JSONResponse(status_code=404, content={'message': "No encontrado"})
-    if result.foto and os.path.exists(result.foto):
-        return FileResponse(result.foto)
-    return JSONResponse(status_code=404, content={"message": "El usuario con dicho id no tiene foto"})

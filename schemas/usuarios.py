@@ -9,12 +9,7 @@ class UsuarioBase(BaseModel):
     apellido: str = Field(min_length=2, max_length=20)
     nombre: str = Field(min_length=2, max_length=20)
     correo: EmailStr
-    pais: str 
-    ciudad: str
-    direccion: str
-    telefono: str
     role:str
-    foto: Optional[str] = None
     class Config:
         from_attributes = True 
 

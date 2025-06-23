@@ -34,12 +34,7 @@ class UsuariosService():
         usuario.nombre = data.nombre
         usuario.correo = data.correo
         usuario.password = data.password
-        usuario.pais = data.pais
-        usuario.ciudad = data.ciudad
-        usuario.direccion = data.direccion
-        usuario.telefono = data.telefono
         usuario.role = data.role
-        usuario.foto = data.foto
         self.db.commit()
         return
 
@@ -47,9 +42,3 @@ class UsuariosService():
        self.db.query(UsuariosModel).filter(UsuariosModel.id == id).delete()
        self.db.commit()
        return
-    
-    def subir_foto_usuario(self, id: int, ruta_foto: str):
-        usuario = self.db.query(UsuariosModel).filter(UsuariosModel.id == id).first()
-        usuario.foto = ruta_foto
-        self.db.commit()
-        return
