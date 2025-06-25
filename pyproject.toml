@@ -11,6 +11,9 @@ fastapi = "0.115.13"
 uvicorn = "0.34.3"
 sqlalchemy = "2.0.41"
 mysql-connector-python = "9.3.0"
+passlib = "1.7.4"
+python-multipart = "0.0.20"
+pyjwt = "2.10.1"
 
 [build-system]
 requires = ["poetry-core"]
