@@ -1,14 +1,14 @@
-from pydantic import BaseModel, Field, EmailStr
-from typing import Optional, List
-
+from pydantic import BaseModel, Field
+from typing import Optional
 
 class Destinos(BaseModel):
     id: Optional[int] = None
     nombre: str = Field(min_length=2, max_length=100)
     descripcion: str = Field(min_length=10, max_length=500)
     pais: str = Field(min_length=2, max_length=50)
-    
+
     model_config = {
+        "orm_mode": True,  # <- Necesario para convertir ORM a JSON
         "json_schema_extra": {
             "examples": [
                 {

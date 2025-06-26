@@ -24,8 +24,12 @@ def get_destino(id: int = Path(ge=1, le=2000), db = Depends(get_database_session
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
 @destinos_router.get('/destinos/', tags=['Destinos'], response_model=List[Destinos])
-def get_destinos_by_pais(pais: str = Query(min_length=2, max_length=50), db = Depends(get_database_session)) -> List[Destinos]:
-    result = DestinosService(db).get_destinos_by_pais(pais)
+def get_destinos_by_filtros(
+    nombre: Optional[str] = Query(None, min_length=2, max_length=100),
+    pais: Optional[str] = Query(None, min_length=2, max_length=50),
+    db = Depends(get_database_session)
+) -> List[Destinos]:
+    result = DestinosService(db).get_destinos_by_filtros(nombre=nombre, pais=pais)
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
 @destinos_router.post('/destinos', tags=['Destinos'], response_model=dict, status_code=201)

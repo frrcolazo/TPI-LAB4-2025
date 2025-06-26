@@ -15,13 +15,16 @@ class DestinosService():
         result = self.db.query(DestinosModel).filter(DestinosModel.id == id).first()
         return result
     
-    def get_destinos_by_pais(self, pais):
-        result = self.db.query(DestinosModel).filter(DestinosModel.pais == pais).all()
-        return result
-    
     def get_destino_by_nombre(self, nombre):
-        result = self.db.query(DestinosModel).filter(DestinosModel.nombre == nombre).first()
-        return result
+        return self.db.query(DestinosModel).filter(DestinosModel.nombre == nombre).first()
+
+    def get_destinos_by_filtros(self, nombre=None, pais=None):
+        query = self.db.query(DestinosModel)
+        if nombre:
+            query = query.filter(DestinosModel.nombre.ilike(f"%{nombre}%"))
+        if pais:
+            query = query.filter(DestinosModel.pais.ilike(f"%{pais}%"))
+        return query.all()
     
     def create_destino(self, destino: Destinos):
         new_destino = DestinosModel(**destino.model_dump())
