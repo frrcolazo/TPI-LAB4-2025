@@ -6,7 +6,7 @@ class ReservasService():
     
     def __init__(self, db) -> None:
         self.db = db
-    def get_reservas(self):
+    def get_reservass(self):
         result = self.db.query(ReservasModel).all()
         return result
 
@@ -14,7 +14,7 @@ class ReservasService():
         result = self.db.query(ReservasModel).filter(ReservasModel.id == id).first()
         return result
 
-    def create_reserva(self, reserva: Reservas):
+    def create_reservas(self, reserva: Reservas):
         new_reserva = ReservasModel(
             idUsuario=reserva.idUsuario,
             idPaquete=reserva.idPaquete,
@@ -26,7 +26,7 @@ class ReservasService():
         self.db.refresh(new_reserva)
         return new_reserva
     
-    def update_reserva(self, id, reserva: Reservas):
+    def update_reservas(self, id, reserva: Reservas):
         existing_reserva = self.db.query(ReservasModel).filter(ReservasModel.id == id).first()
         if not existing_reserva:
             return None
@@ -38,7 +38,7 @@ class ReservasService():
         self.db.refresh(existing_reserva)
         return existing_reserva
     
-    def delete_reserva(self, id):
+    def delete_reservas(self, id):
         existing_reserva = self.db.query(ReservasModel).filter(ReservasModel.id == id).first()
         if not existing_reserva:
             return None
