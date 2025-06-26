@@ -19,7 +19,8 @@ class ReservasService():
             idUsuario=reserva.idUsuario,
             idPaquete=reserva.idPaquete,
             cantidad_personas=reserva.cantidad_personas,
-            fecha_reserva=reserva.fecha_reserva
+            fecha_reserva=reserva.fecha_reserva,
+            estado=reserva.estado if reserva.estado is not None else True  # Default to True if not provided
         )
         self.db.add(new_reserva)
         self.db.commit()
@@ -34,6 +35,8 @@ class ReservasService():
         existing_reserva.idPaquete = reserva.idPaquete
         existing_reserva.cantidad_personas = reserva.cantidad_personas
         existing_reserva.fecha_reserva = reserva.fecha_reserva
+        existing_reserva.estado = reserva.estado if reserva.estado is not None else existing_reserva.estado
+        self.db.add(existing_reserva)
         self.db.commit()
         self.db.refresh(existing_reserva)
         return existing_reserva
@@ -49,9 +52,6 @@ class ReservasService():
     def get_reservas_by_usuario(self, idUsuario):
         result = self.db.query(ReservasModel).filter(ReservasModel.idUsuario == idUsuario).all()
         return result
-
-    def get_reservas_by_paquete(self, idPaquete):
-        result = self.db.query(ReservasModel).filter(ReservasModel.idPaquete == idPaquete).all()
-        return result
+    
 
     #COMPLETAR LO QUE FALTA FELI

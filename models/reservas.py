@@ -1,5 +1,5 @@
 from config.database import Base
-from sqlalchemy import Column, Integer, String, Numeric, ForeignKey, Text, Date
+from sqlalchemy import Column, Integer, String, Numeric, ForeignKey, Text, Date, Boolean
 from sqlalchemy.orm import relationship
 
 
@@ -12,6 +12,8 @@ class Reservas(Base):
     idPaquete= Column(Integer, ForeignKey('paquetes.id'), nullable=False)
     cantidad_personas= Column(Integer)
     fecha_reserva= Column(Date)
+    estado= Column(Boolean)
+    
 #COMPLETAR LO QUE FALTA FELI
 
 

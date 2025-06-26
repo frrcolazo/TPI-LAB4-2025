@@ -57,5 +57,12 @@ def delete_reservas(id: int, db = Depends(get_database_session))-> dict:
     ReservasService(db).delete_ventas(id)
     return JSONResponse(status_code=200, content={"message": "Se ha eliminado la reserva"})
 
+@reservas_router.get('/reservas/usuario/{idUsuario}', tags=['Reservas'], response_model=List[Reservas], status_code=200, dependencies=[Depends(JWTBearer())])
+def get_reservas_by_usuario(idUsuario: int = Path(ge=1, le=2000), db = Depends(get_database_session)) -> List[Reservas]:
+    #db = Session()
+    result = ReservasService(db).get_reservas_by_usuario(idUsuario)
+    if not result:
+        return JSONResponse(status_code=404, content={'message': "No encontrado"})
+    return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
 #COMPLETAR FELI
