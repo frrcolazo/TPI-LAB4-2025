@@ -7,9 +7,9 @@ class Destinos(BaseModel):
     descripcion: str = Field(min_length=10, max_length=500)
     pais: str = Field(min_length=2, max_length=50)
 
-    model_config = {
-        "orm_mode": True,  # <- Necesario para convertir ORM a JSON
-        "json_schema_extra": {
+    class Config:
+        from_attributes = True  # <- Necesario para convertir ORM a JSON
+        json_schema_extra = {
             "examples": [
                 {
                     "id": 1,
@@ -19,5 +19,4 @@ class Destinos(BaseModel):
                 }
             ]
         }
-    }
 #COMPLETAR GER

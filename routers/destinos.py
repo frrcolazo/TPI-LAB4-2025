@@ -11,7 +11,7 @@ from services.destinos import DestinosService
 from schemas.destinos import Destinos
 
 destinos_router = APIRouter()
-@destinos_router.get('/destinos', tags=['Destinos'], response_model=List[Destinos], status_code=200, dependencies=[Depends(JWTBearer())])
+@destinos_router.get('/destinos', tags=['Destinos'], response_model=List[Destinos], status_code=200)
 def get_destinos(db = Depends(get_database_session)) -> List[Destinos]:
     result = DestinosService(db).get_destinos()
     return JSONResponse(status_code=200, content=jsonable_encoder(result))

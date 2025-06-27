@@ -1,6 +1,5 @@
 from models.destinos import Destinos as DestinosModel
 from schemas.destinos import Destinos
-from sqlalchemy import  func
 
 class DestinosService():
     
