@@ -14,4 +14,4 @@ class Paquetes(Base):
     cupo = Column(Integer)
     fecha_inicio = Column(Date)
     fecha_fin = Column(Date)
-    destino = relationship("destinos", backref="paquetes", lazy="select")
+    destino = relationship("Destinos", backref="paquetes", lazy="select")
