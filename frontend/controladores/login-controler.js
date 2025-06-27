@@ -31,33 +31,33 @@ import { usuariosServices } from "/servicios/usuarios-servicios.js";
    
 }) */
 
-export function setLogin (){
-    frmLogin = frmLogin = document.getElementById('frmLogin'); 
-    const btnLogout = document.getElementById('btnLogout');
-    btnLogout.addEventListener('click', logout);
+// export function setLogin (){
+//     frmLogin = frmLogin = document.getElementById('frmLogin'); 
+//     const btnLogout = document.getElementById('btnLogout');
+//     btnLogout.addEventListener('click', logout);
     
-    if (getUsuarioAutenticado()){
-        if (frmLogin)
-            frmLogin.outerHTML= '';
+//     if (getUsuarioAutenticado()){
+//         if (frmLogin)
+//             frmLogin.outerHTML= '';
         
-    }else{
-        document.getElementById("sitio").classList.add('d-none');
+//     }else{
+//         document.getElementById("sitio").classList.add('d-none');
         
-        inputEmail = document.getElementById('loginEmail');
+//         inputEmail = document.getElementById('loginEmail');
   
-        inputPassword = document.getElementById('loginPassword');
+//         inputPassword = document.getElementById('loginPassword');
         
-        const btnLogin = document.getElementById('iniciar-sesion');
+//         const btnLogin = document.getElementById('iniciar-sesion');
     
-        inputEmail.addEventListener('blur', validarForm);
-        inputPassword.addEventListener('blur', validarForm);
+//         inputEmail.addEventListener('blur', validarForm);
+//         inputPassword.addEventListener('blur', validarForm);
 
-        btnLogin.addEventListener('click', usuarioExiste);
+//         btnLogin.addEventListener('click', usuarioExiste);
 
        
-    }
+//     }
    
-}
+// }
 
 async function usuarioExiste() {
 

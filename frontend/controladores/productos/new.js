@@ -1,4 +1,4 @@
-import { categoriasServices } from "../../servicios/categorias-servicios.js";
+import { categoriasServices } from "../../servicios/destinos-servicios.js";
 import { productosServices } from "/servicios/productos-servicios.js";
 
 
