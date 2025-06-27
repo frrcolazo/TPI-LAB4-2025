@@ -11,3 +11,6 @@ class Paquetes(BaseModel):
     cupo: Optional[PositiveFloat]
     fecha_inicio: Optional[PastDate]
     fecha_fin: Optional[PastDate]
+
+    class Config:
+        from_attributes = True
