@@ -36,7 +36,7 @@ app.include_router(paquetes_router)
 Base.metadata.create_all(bind=engine)
 
 # 1. Servimos todos los archivos estáticos del directorio frontend en la ruta "/" (raíz)
-#app.mount("/", StaticFiles(directory="frontend", html=True ), name="frontend")
+app.mount("/", StaticFiles(directory="frontend", html=True ), name="frontend")
 
 
 # @app.get('/', tags=['home'])
