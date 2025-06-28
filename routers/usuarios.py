@@ -14,6 +14,8 @@ from schemas.usuarios import Usuarios
 from passlib.context import CryptContext
 from utils.jwt_manager import create_token
 from schemas.usuarios import User, UsuarioBase
+from services.reservas import ReservasService
+from schemas.reservas import Reservas
 import os
 import shutil
 usuarios_router = APIRouter()
@@ -61,7 +63,20 @@ def get_usuarios(db = Depends(get_database_session)):
     result = UsuariosService(db).get_usuarios()
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
-
+@usuarios_router.get('/usuarios/top-reserva', tags=['Usuarios'], status_code=200)
+def usuario_con_mas_reservas(db = Depends(get_database_session)):
+    result = UsuariosService(db).get_usuario_con_mas_reservas()
+    if not result:
+        return JSONResponse(status_code=404, content={"message": "No se encontraron usuarios con reservas"})
+    
+    # Desempaquetar la tupla para mejor claridad
+    usuario_id, nombre, cantidad_reservas = result
+    
+    return JSONResponse(status_code=200, content=jsonable_encoder({
+        "id": usuario_id,
+        "nombre": nombre,
+        "cantidad_reservas": cantidad_reservas
+    }))
 @usuarios_router.get('/usuarios/{id}', tags=['Usuarios'], response_model=UsuarioBase)
 def get_usuario(id: int = Path(ge=1, le=2000), db = Depends(get_database_session)) :
     #db = Session()
@@ -113,3 +128,4 @@ def delete_usuarios(id: int, db = Depends(get_database_session))-> dict:
         return JSONResponse(status_code=404, content={"message": "No se encontró"})
     UsuariosService(db).delete_usuarios(id)
     return JSONResponse(status_code=200, content={"message": "Se ha eliminado el usuario"})
+

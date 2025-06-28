@@ -1,5 +1,9 @@
 from models.usuarios import Usuarios as UsuariosModel
 from schemas.usuarios import Usuarios
+from models.reservas import Reservas as ReservasModel
+from models.paquetes import Paquetes as PaquetesModel
+from datetime import date
+from sqlalchemy import func, desc
 
 
 class UsuariosService():
@@ -42,3 +46,17 @@ class UsuariosService():
        self.db.query(UsuariosModel).filter(UsuariosModel.id == id).delete()
        self.db.commit()
        return
+
+    def get_usuario_con_mas_reservas(self):
+        query = (
+            self.db.query(
+                UsuariosModel.id,
+                UsuariosModel.nombre,
+                func.count(ReservasModel.id).label("cantidad_reservas")
+            )
+            .join(ReservasModel, UsuariosModel.id == ReservasModel.usuario_id)
+            .group_by(UsuariosModel.id, UsuariosModel.nombre)
+            .order_by(desc("cantidad_reservas"))
+            .limit(1)
+        )
+        return query.first()
