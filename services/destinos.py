@@ -42,9 +42,4 @@ class DestinosService():
     def delete_destino(self, id: int):
         self.db.query(DestinosModel).filter(DestinosModel.id == id).delete()
         self.db.commit()
-<<<<<<< HEAD
         return
-#COMPLETAR GER
-=======
-        return
->>>>>>> develop

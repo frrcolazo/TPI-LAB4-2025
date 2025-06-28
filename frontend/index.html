@@ -14,15 +14,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<<<<<<< HEAD
-    <!-- AdminLTE (CDN) -->
-=======
     <!-- AdminLTE -->
->>>>>>> develop
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+  
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -47,8 +47,8 @@
   <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
   
       
-  <!-- AdminLTE App (CDN) -->
-  <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="/dist/js/adminlte.js"></script>
 
   <!-- DataTables -->
   
@@ -79,7 +79,7 @@
    <!--Include HTML-->
   <script type="module" src="/assets/js/include-html-main/include-html.js"></script>
   
-  <script type="module" src="App/index.js"></script>
+  <script type="module" src="/App/index.js"></script>
 
 </head>
 
@@ -89,6 +89,8 @@ CUERPO DOCUMENTO
 
 <body class="hold-transition sidebar-mini">
     
+    <div data-include="/assets/modulos/login.html"> </div>
+        
     <!-- Site wrapper -->
     <div class="wrapper" id="sitio">
         <!--=====================================
