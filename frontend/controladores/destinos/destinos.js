@@ -1,103 +1,83 @@
-import { productosServices } from "../../servicios/productos-servicios.js";
+import { destinosServices } from "../../servicios/destinos-servicios.js";
 import { newRegister } from "./new.js";
 import { editRegister } from "./new.js";
 
-
-
-const htmlProductos = 
+const htmlDestinos = 
 `<div class="card">
    <div class="card-header">
-   
    <h3 class="card-title"> 
-       <a class="btn bg-dark btn-sm btnAgregarProducto" href="#/newProducto">Agregar Producto</a>
+       <a class="btn bg-dark btn-sm btnAgregarDestino" href="#/newDestino">Agregar Destino</a>
    </h3>
-
    </div>
-
    <!-- /.card-header -->
    <div class="card-body">            
-   <table id="productosTable" class="table table-bordered table-striped tableProducto" width="100%">
+   <table id="destinosTable" class="table table-bordered table-striped tableDestino" width="100%">
        <thead>
            <tr>
-           <th># </th>
+           <th>#</th>
            <th>Nombre</th>
-           <th>Precio</th>
-           <th>Categoria</th>
+           <th>Descripción</th>
+           <th>País</th>
            <th>Acciones</th>
            </tr>
        </thead>
-   
    </table>
    </div>
    <!-- /.card-body -->
 </div> `; 
 
-export async function Productos(){
+export async function Destinos(){
+    console.log("Destinos ejecutado");
     let d = document
     const spinner = document.getElementById("spinner");
     let res='';
-    d.querySelector('.contenidoTitulo').innerHTML = 'Productos';
+    d.querySelector('.contenidoTitulo').innerHTML = 'Destinos';
     d.querySelector('.contenidoTituloSec').innerHTML = '';
-    d.querySelector('.rutaMenu').innerHTML = "Productos";
-    d.querySelector('.rutaMenu').setAttribute('href',"#/productos");
+    d.querySelector('.rutaMenu').innerHTML = "Destinos";
+    d.querySelector('.rutaMenu').setAttribute('href',"#/destinos");
     let cP =d.getElementById('contenidoPrincipal');
-
     //Muestro spinner
-    spinner.classList.add ( "d-flex"); 
-    res = await productosServices.listar();
+    spinner.classList.add ( "d-flex");  
+    res = await destinosServices.listar();
     res.forEach(element => {
-      element.categoria = element.categoria.descripcion;  
-      element.action = "<div class='btn-group'><a class='btn btn-warning btn-sm mr-1 rounded-circle btnEditarProducto'  href='#/editProducto' data-idProducto='"+ element.id +"'> <i class='fas fa-pencil-alt'></i></a><a class='btn btn-danger btn-sm rounded-circle removeItem btnBorrarProducto'href='#/delProducto' data-idProducto='"+ element.id +"'><i class='fas fa-trash'></i></a></div>";
+      element.action = "<div class='btn-group'><a class='btn btn-warning btn-sm mr-1 rounded-circle btnEditarDestino'  href='#/editDestino' data-idDestino='"+ element.id +"'> <i class='fas fa-pencil-alt'></i></a><a class='btn btn-danger btn-sm rounded-circle removeItem btnBorrarDestino'href='#/delDestino' data-idDestino='"+ element.id +"'><i class='fas fa-trash'></i></a></div>";
     });  
-     
-    cP.innerHTML =  htmlProductos;
- 
+    cP.innerHTML =  htmlDestinos;
     llenarTabla(res);
-
-    let btnAgregar = d.querySelector(".btnAgregarProducto");
-   
+    let btnAgregar = d.querySelector(".btnAgregarDestino");
     btnAgregar.addEventListener("click", agregar);
-
     //Oculto spinner  
     spinner.classList.replace("d-flex", "d-none");    
-   
-
 }
 
 function enlazarEventos( oSettings){
     let d = document;
-    let btnEditar = d.querySelectorAll(".btnEditarProducto");
-    let btnBorrar = d.querySelectorAll(".btnBorrarProducto");
-
+    let btnEditar = d.querySelectorAll(".btnEditarDestino");
+    let btnBorrar = d.querySelectorAll(".btnBorrarDestino");
     for(let i=0 ; i< btnEditar.length ; i++){
         btnEditar[i].addEventListener("click", editar);
         btnBorrar[i].addEventListener("click", borrar);
     }    
-
 }
 
 function agregar(){
     newRegister();
-
 }
 function editar(){
-   let id = this.getAttribute('data-idProducto') ;
+   let id = this.getAttribute('data-idDestino') ;
    editRegister(id);
-    
 }
 
 async function borrar(){
-    let id = this.getAttribute('data-idProducto') ;
+    let id = this.getAttribute('data-idDestino') ;
     let borrar=0;
   await Swal.fire({
         title: 'Está seguro que desea eliminar el registro?',
         showDenyButton: true,
         confirmButtonText: 'Si',
         denyButtonText: `Cancelar`,
-  
         focusDeny: true
       }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
            borrar = 1;
         } else if (result.isDenied) {
@@ -106,23 +86,20 @@ async function borrar(){
         }
       })
       if (borrar === 1)
-            await productosServices.borrar(id); 
-      window.location.href = "#/productos";  
+            await destinosServices.borrar(id); 
+      window.location.href = "#/destinos";  
 }
 
 function llenarTabla(res){ 
-   
-
-    new DataTable('#productosTable', {
+    new DataTable('#destinosTable', {
         responsive:true,
         data : res,
         columns: [
             { data: 'id' },    
             { data: 'nombre' },
-            { data: 'precio' },
-            { data: 'categoria' },
+            { data: 'descripcion' },
+            { data: 'pais' },
             { data: 'action', "orderable":false }
-            
         ],
         fnDrawCallback: function ( oSettings) {
             enlazarEventos( oSettings); },
@@ -152,9 +129,6 @@ function llenarTabla(res){
                 sSortAscending:  ": Activar para ordenar la columna de manera ascendente",
                 sSortDescending: ": Activar para ordenar la columna de manera descendente"
             }
-                            
         }                           
     });
-
-} 
-  
+}

@@ -1,5 +1,4 @@
-const url = "http://127.0.0.1:8000/categorias";
-
+const url = "http://127.0.0.1:8000/destinos";
 
 async function listar(id) {
     let cadUrl;
@@ -10,29 +9,29 @@ async function listar(id) {
     return await fetch(cadUrl,{
         headers: {
             "accept": "application/json",
-            "Content-type": "application/json",
-            "Authorization": "Bearer " + localStorage.getItem('token') 
+            "Content-type": "application/json"
+            // "Authorization": "Bearer " + localStorage.getItem('token') 
         }
     })
     .then(respuesta => respuesta.json());
 }
 
-async function crear(descripcion) {
-
+async function crear({ nombre, descripcion, pais }) {
     return await fetch(url, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            descripcion: descripcion
+            nombre,
+            descripcion,
+            pais
         })
     })
     .then(respuesta => respuesta.json());
 }
 
-async function editar(id, descripcion) {
-
+async function editar(id, { nombre, descripcion, pais }) {
     let urlPut = url + "/" + id;
     return await fetch(urlPut, {
         method: 'PUT',
@@ -40,14 +39,15 @@ async function editar(id, descripcion) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            descripcion: descripcion
+            nombre,
+            descripcion,
+            pais
         })
     })
     .then(respuesta => respuesta.json());
 }
 
 async function borrar(id){
-  
     let urlPut = url + "/" + id;
     return await fetch(urlPut, {
             method: 'DELETE'
@@ -55,7 +55,7 @@ async function borrar(id){
        .then(respuesta => respuesta.json());
 }
 
-export const categoriasServices = {
+export const destinosServices = {
     listar,
     crear,
     editar,
