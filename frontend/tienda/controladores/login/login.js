@@ -10,32 +10,31 @@ const htmlLogin=
         <form  class="formLogin" >
 
             <div class="input-group">
-                
+                <input type="text" class="form-control" id="regNombre" placeholder="Nombre" name="regNombre" required style="display:none;">
+            </div>
+
+            <div class="input-group">
+                <input type="text" class="form-control" id="regApellido" placeholder="Apellido" name="regApellido" required style="display:none;">
+            </div>
+
+            <div class="input-group">
                 <input type="email" class="form-control" id="loginEmail" placeholder="Email" name="loginEmail" autocomplete required>
-                
             </div>
 
             <div class="input-group">
-                
                 <input type="password" class="form-control" id="loginPassword" placeholder="Password" name="loginPassword" autocomplete required>
-            
             </div>
 
             <div class="input-group">
-                
                 <input type="password" class="form-control" id="reLoginPassword" placeholder="Repetir Password" name="reLoginPassword"  required>
-            
             </div>
                         
             <div class="row">
-                                
                 <div class="col-4">
                 <button type="submit"  id="iniciar-sesion" class="btnAmarillo">Login</button>
                 </div>
-                    
             </div>
         </form>
-            
     </div>
 </div>
 `;
@@ -46,6 +45,8 @@ var formulario;
 var inputEmail;
 var inputPassword;
 var inputRepetirPass;
+var inputNombre;
+var inputApellido;
 
 
 
@@ -97,11 +98,17 @@ function crearFormulario(registrar){
     inputEmail= d.getElementById("loginEmail");
     inputPassword= d.getElementById("loginPassword");
     inputRepetirPass = d.getElementById("reLoginPassword");
+    inputNombre = d.getElementById("regNombre");
+    inputApellido = d.getElementById("regApellido");
+    
     if (! registrar ){        
         inputRepetirPass.outerHTML = "";
+        inputNombre.outerHTML = "";
+        inputApellido.outerHTML = "";
     }else{
-        
         inputRepetirPass.style.display ="block";
+        inputNombre.style.display ="block";
+        inputApellido.style.display ="block";
         d.querySelector(".cajaLogin p").innerHTML = "Registar usuario"
     }
     
@@ -150,7 +157,7 @@ async function  registrarUsuario(e){
     e.preventDefault();
  
     if( inputPassword.value === inputRepetirPass.value) {
-       await usuariosServices.crear(null, null, inputEmail.value, inputPassword.value);
+       await usuariosServices.crear(inputApellido.value, inputNombre.value, inputEmail.value, inputPassword.value, "Cliente");
        mostrarMensaje('Email registrado.') 
        window.location.href = "#login" ; 
     }else{

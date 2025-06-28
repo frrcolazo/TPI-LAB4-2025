@@ -1,6 +1,7 @@
 from sqlalchemy import update
 from sqlalchemy.orm import Session
 from models.paquetes import Paquetes as PaquetesModel
+from models.destinos import Destinos as DestinosModel
 from schemas.paquetes import Paquetes
 
 
@@ -17,35 +18,33 @@ class PaquetesService:
         result = self.db.query(PaquetesModel).filter(PaquetesModel.id == id).first()
         return result
 
-    def get_paquetes_by_mail(self, correo):
+    def get_paquetes_by_destino(self, destino: str):
         result = (
-            self.db.query(PaquetesModel).filter(PaquetesModel.correo == correo).all()
+            self.db.query(PaquetesModel)
+            .join(PaquetesModel.destino)  # ← join a la tabla relacionada
+            .filter(DestinosModel.nombre == destino)  # ← filtro por campo de la relación
+            .all()
         )
         return result
 
-    def get_paquetes_by_mail_first(self, correo):
-        result = (
-            self.db.query(PaquetesModel).filter(PaquetesModel.correo == correo).first()
-        )
-        return result
 
     def create_paquetes(self, Paquete: Paquetes):
-        new_producto = PaquetesModel(**Paquete.model_dump())
-        self.db.add(new_producto)
+        new_paquete = PaquetesModel(**Paquete.model_dump())
+        self.db.add(new_paquete)
         self.db.commit()
         return
 
-    def update_paquetes(self, id: int, data: Paquetes):
+    def update_paquetes(self, id: int, data: Paquetes) -> bool:
         query = (
             update(PaquetesModel)
             .where(PaquetesModel.id == id)
             .values(data.model_dump())
         )
-        self.db.execute(query)
+        updated = self.db.execute(query)
         self.db.commit()
-        return
+        return updated.rowcount > 0
 
-    def delete_paquetes(self, id: int):
-        self.db.query(PaquetesModel).filter(PaquetesModel.id == id).delete()
+    def delete_paquetes(self, id: int) -> bool:
+        deleted = self.db.query(PaquetesModel).filter(PaquetesModel.id == id).delete()
         self.db.commit()
-        return
+        return deleted > 0

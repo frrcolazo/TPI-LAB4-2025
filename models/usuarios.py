@@ -12,4 +12,3 @@ class Usuarios(Base):
     password=Column(String(1000))
     role= Column(String(50))
 
-#COMPLEATR FER
