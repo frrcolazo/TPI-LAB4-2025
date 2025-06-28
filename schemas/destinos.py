@@ -19,4 +19,7 @@ class Destinos(BaseModel):
                 }
             ]
         }
+<<<<<<< HEAD
 #COMPLETAR GER
+=======
+>>>>>>> develop

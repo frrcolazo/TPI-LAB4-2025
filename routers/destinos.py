@@ -59,5 +59,9 @@ def delete_destino(id: int, db = Depends(get_database_session)) -> dict:
     if not result:
         return JSONResponse(status_code=404, content={"message": "No se encontró"})
     DestinosService(db).delete_destino(id)
+<<<<<<< HEAD
     return JSONResponse(status_code=200, content={"message": "Se ha eliminado el destino"})
 #COMPLETAR GER
+=======
+    return JSONResponse(status_code=200, content={"message": "Se ha eliminado el destino"})
+>>>>>>> develop
