@@ -2,6 +2,8 @@ from pydantic import BaseModel, Field, EmailStr, PositiveInt, PositiveFloat
 from typing import Optional, List
 from datetime import date
 
+from schemas.destinos import Destinos
+
 
 class Paquetes(BaseModel):
     id: Optional[PositiveInt] = None
@@ -11,6 +13,7 @@ class Paquetes(BaseModel):
     cupo: Optional[PositiveFloat]
     fecha_inicio: Optional[date]
     fecha_fin: Optional[date]
+    destino: Optional[Destinos]
 
     class Config:
         from_attributes = True
