@@ -69,12 +69,11 @@ def usuario_con_mas_reservas(db = Depends(get_database_session)):
     if not result:
         return JSONResponse(status_code=404, content={"message": "No se encontraron usuarios con reservas"})
     
-    # Desempaquetar la tupla para mejor claridad
-    usuario_id, nombre, cantidad_reservas = result
+    usuario_id, nombre, apellido, cantidad_reservas = result
     
     return JSONResponse(status_code=200, content=jsonable_encoder({
         "id": usuario_id,
-        "nombre": nombre,
+        "nombre": f"{nombre} {apellido}",
         "cantidad_reservas": cantidad_reservas
     }))
 @usuarios_router.get('/usuarios/{id}', tags=['Usuarios'], response_model=UsuarioBase)
