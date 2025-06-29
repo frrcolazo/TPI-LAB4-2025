@@ -18,7 +18,7 @@ reservas_router = APIRouter()
 def get_reservass(db = Depends(get_database_session)) -> List[Reservas]:
     #db = Session()
     result = ReservasService(db).get_reservass()
-    reservas_schemas = [Reservas.model_validate(reserva) for reserva in result]
+    reservas_schemas = [Reservas.model_validate(reserva, from_attributes=True) for reserva in result]
     return reservas_schemas
 
 
@@ -61,5 +61,6 @@ def get_reservas_by_usuario(idUsuario: int = Path(ge=1, le=2000), db=Depends(get
     result = ReservasService(db).get_reservas_by_usuario(idUsuario)
     if not result:
         raise HTTPException(status_code=404, detail="No encontrado")
-    reservas_schemas = [Reservas.model_validate(reserva) for reserva in result]
+    reservas_schemas = [Reservas.model_validate(reserva, from_attributes=True) for reserva in result]
+
     return reservas_schemas

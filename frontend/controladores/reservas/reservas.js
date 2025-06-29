@@ -30,21 +30,44 @@ export async function Reservas() {
     const cP = d.getElementById('contenidoPrincipal');
 
     spinner.classList.add("d-flex");
-    const res = await reservasServices.listar();
+    try {
+        const res = await reservasServices.listar();
 
-    res.forEach(r => {
-        r.action = `<input type="checkbox" class="ckboxEstado" data-idReserva=${r.id} ${r.estado ? "checked" : ""}>`;
-    });
+        // Añadimos un campo para checkbox con estado
+        res.forEach(r => {
+            r.action = `<input type="checkbox" class="ckboxEstado" data-idreserva="${r.id}" ${r.estado ? "checked" : ""}>`;
+        });
 
-    cP.innerHTML = htmlReservas;
-    llenarTabla(res);
-    spinner.classList.replace("d-flex", "d-none");
+        cP.innerHTML = htmlReservas;
+        llenarTabla(res);
+    } catch (error) {
+        console.error("Error cargando reservas:", error);
+        cP.innerHTML = `<div class="alert alert-danger">Error cargando reservas.</div>`;
+    } finally {
+        spinner.classList.replace("d-flex", "d-none");
+    }
 }
 
 function chkBoxChange(event) {
     const id = event.target.getAttribute('data-idreserva');
     const estado = event.target.checked;
-    reservasServices.editar(id, estado);
+
+    // Obtener la reserva completa para enviar el objeto actualizado
+    reservasServices.listar(id).then(reservaCompleta => {
+        reservaCompleta.estado = estado;
+        reservasServices.editar(id, reservaCompleta)
+            .catch(err => {
+                console.error("Error actualizando estado:", err);
+                alert("No se pudo actualizar el estado");
+                // opcional: revertir checkbox
+                event.target.checked = !estado;
+            });
+    }).catch(err => {
+        console.error("Error obteniendo reserva:", err);
+        alert("No se pudo obtener la reserva");
+        // revertir checkbox
+        event.target.checked = !estado;
+    });
 }
 
 function enlazarEventos() {

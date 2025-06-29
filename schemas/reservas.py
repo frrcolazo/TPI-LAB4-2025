@@ -14,6 +14,7 @@ class ReservasUpdate(BaseModel):
     estado: bool  
 
 class Config:
+    from_attributes = True
     schema_extra = {
         "example": {
             "idUsuario": 1,
@@ -23,5 +24,5 @@ class Config:
             "estado": True
         }
     }  
-    from_attributes = True
+    
 #COMPLETAR FELI
