@@ -1,7 +1,7 @@
-import { RouterTienda } from "../controladores/routerTienda.js";
+import { RouterVuelo } from "../controladores/routerVuelo.js";
 
 export function App(){
     
-    RouterTienda();
+    RouterVuelo();
     
 }
