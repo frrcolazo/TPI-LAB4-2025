@@ -15,7 +15,8 @@ class DestinosService():
         return result
     
     def get_destino_by_nombre(self, nombre):
-        return self.db.query(DestinosModel).filter(DestinosModel.nombre == nombre).first()
+        nombre = nombre.strip()
+        return self.db.query(DestinosModel).filter(DestinosModel.nombre.ilike(nombre)).first()
 
     def get_destinos_by_filtros(self, nombre=None, pais=None):
         query = self.db.query(DestinosModel)
