@@ -37,7 +37,7 @@ export function RouterVuelo() {
 
 
   } else if (hash === "#destinos") {
-    // Acá cargás el historial
+    // Acá cargás los destinos
     import("./destinos/seccionDestinos.js").then(mod => mod.mostrarDestinos());
 
 
@@ -51,16 +51,32 @@ export function RouterVuelo() {
     // Pantalla de inicio: botones + carruseles
     cargarSeccionInicio();
     mostrarUsuario();
-    CarruselPorDestino();
-    listarPaquetes(); // O podés combinar esto en una sola función si querés
+    // CarruselPorDestino();
+    // listarPaquetes(); // O podés combinar esto en una sola función si querés
   }
 
   console.log("Ruta:", hash);
+  mostrarUsuario();
 }
 
 function setSession(session) {
   let d = document;
   if (session.autenticado) {
     mostrarUsuario(session.email);
+  } else {
+    // Si NO está autenticado, reseteamos los botones de login/register
+    let btnLogin = d.querySelector(".btnLogin");
+    let btnRegister = d.querySelector(".btnRegister");
+
+    if (btnLogin) {
+      btnLogin.textContent = "Login";
+      btnLogin.setAttribute("href", "#login");
+    }
+
+    if (btnRegister) {
+      btnRegister.textContent = "Registrarse";
+      btnRegister.setAttribute("href", "#register");
+    }
   }
 }
+

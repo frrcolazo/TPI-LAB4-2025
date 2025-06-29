@@ -133,15 +133,19 @@ async function  ingresar(e){
      */
     e.preventDefault();
     let idUsuario = await usuarioExiste();
-    if (idUsuario) {
-        setUsuarioAutenticado(true, idUsuario); 
-        mostrarUsuario(inputEmail.value);
-        window.location.href = "#" ;
 
-    }else{
+    if (idUsuario) {
+        setUsuarioAutenticado(true, idUsuario);
+        mostrarUsuario(inputEmail.value);
+
+        let seccionLogin = document.querySelector(".seccionLogin");
+        if (seccionLogin) seccionLogin.innerHTML = "";
+
+        window.location.hash = "";
+
+    } else {
         mostrarMensaje('Email o contraseña incorrecto, intenta nuevamente');
     }
-
 }
 
 async function  registrarUsuario(e){
@@ -202,22 +206,35 @@ async function usuarioExiste() {
     }
 }
 
-export function mostrarUsuario(email){
-    /**
-     * 1- Esta función deberá capturar del dom la clase .btnLogin y asignarle el texto existente en el parámetro email.
-     * 2- Deberá capturar del dom la clase .btnRegister y asignarle el texto "Logout" y a este elemento asignarle el valor
-     *    "#logout" sobre el atributo href.
-     **/
-    let d=document;
-    let btnLogin =d.querySelector(".btnLogin");
-    let btnLogout =d.querySelector(".btnRegister");
-    //btnLogin.setAttribute("data-emailUsuario", inputEmail.value);
-    //btnLogin.setAttribute("data-idUsuario", idUsuario);
-    btnLogin.textContent = email;
-    btnLogout.textContent = "Logout";
-    btnLogout.setAttribute("href", "#logout");
+export function mostrarUsuario(email) {
+    let d = document;
+    let btnLogin = d.querySelector(".btnLogin");
+    let btnLogout = d.querySelector(".btnRegister");
 
+    if (!email) {
+        email = sessionStorage.getItem("email");
+    }
+
+    if (email && email !== "") {
+        btnLogin.textContent = email;
+        btnLogin.removeAttribute("href");
+
+        btnLogout.textContent = "Logout";
+        btnLogout.setAttribute("href", "#logout");
+        btnLogout.onclick = null; // Limpio cualquier manejador viejo
+
+    } else {
+        btnLogin.textContent = "Login";
+        btnLogin.setAttribute("href", "#login");
+
+        btnLogout.textContent = "Registrarse";
+        btnLogout.setAttribute("href", "#register");
+
+        // Limpiamos el evento onclick por si quedó del logout
+        btnLogout.onclick = null;
+    }
 }
+
 
 function mostrarMensaje(msj) {
     /**
