@@ -36,11 +36,12 @@ export function RouterVuelo() {
 
   } else if (hash === "#historial") {
     // Acá cargás el historial
-    import("./historial/historial.js").then(mod => mod.mostrarHistorial());
+    import("./historial/seccionHistorial.js").then(mod => mod.mostrarHistorial());
 
   } else {
     // Pantalla de inicio: botones + carruseles
     cargarSeccionInicio();
+    mostrarUsuario();
     CarruselPorDestino();
     listarPaquetes(); // O podés combinar esto en una sola función si querés
   }

@@ -1,0 +1,41 @@
+.seccionHistorial {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background: rgba(0,0,0,0.3);
+    padding: 3rem 0;
+}
+
+.titulo-historial {
+    font-size: 3rem;
+    color: #f0f8a1;
+    margin-bottom: 2rem;
+    text-align: center;
+    letter-spacing: 2px;
+    font-family: 'Work Sans', cursive, sans-serif;
+    text-shadow: 2px 2px 8px #222;
+}
+
+.carrusel-historial {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    width: 100%;
+    margin-top: 2rem;
+}
+
+.item-historial {
+    width: 260px;
+    height: 260px;
+    background: #a3a395;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.4rem;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
