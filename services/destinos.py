@@ -44,3 +44,6 @@ class DestinosService():
         self.db.query(DestinosModel).filter(DestinosModel.id == id).delete()
         self.db.commit()
         return
+    
+    def get_total_destinos(self):
+        return self.db.query(DestinosModel).count()
