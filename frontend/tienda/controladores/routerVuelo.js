@@ -32,7 +32,7 @@ export function RouterVuelo() {
 
   } else if (hash === "#reservas") {
     // Acá cargás la vista de reservas activas
-    import("./reservas/reservas.js").then(mod => mod.mostrarReservas());
+    import("./reservas/seccionReservas.js").then(mod => mod.mostrarReservas());
 
   } else if (hash === "#historial") {
     // Acá cargás el historial
