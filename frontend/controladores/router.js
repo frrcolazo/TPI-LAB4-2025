@@ -2,8 +2,7 @@ import { Categorias } from "./categorias/categorias.js";
 import { Home } from "./home/home.js";
 import { Productos } from "./productos/productos.js";
 import { Usuarios } from "./usuarios/usuarios.js";
-import { Ventas } from "./ventas/ventas.js";
-
+import { Reservas } from "./reservas/reservas.js";
 export function Router(){
     let hash = location.hash;
     //CAMBIAR MENU ACTIVO
@@ -26,7 +25,7 @@ export function Router(){
         Home();
     }else if(hash==='#/productos'){
         Productos();
-    }else if(hash==='#/ventas'){
+    }else if(hash==='#/reservas'){
         Ventas();
     }     
     console.log (hash);
