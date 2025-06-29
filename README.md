@@ -52,6 +52,14 @@ poetry shell
 ## Construcción del proyecto
 
 En desarrollo:
+
+> Recuerda crear el archivo .env y agregarle la variable DATABASE_URL:
+
+Ej:
+```.env
+DATABASE_URL = "mysql+mysqlconnector://root:admin@localhost:3306/proyecto_final"
+```
+
 ```bash
 uvicorn main:app --reload
 ```

@@ -1,40 +1,46 @@
 import { Categorias } from "./categorias/categorias.js";
 import { Home } from "./home/home.js";
-import { Productos } from "./productos/productos.js";
+import { Paquetes } from "./paquetes/paquetes.js";
 import { Usuarios } from "./usuarios/usuarios.js";
 import { Ventas } from "./ventas/ventas.js";
 import { Registro } from "./publico/registro.js";
 import { Destinos } from "./destinos/destinos.js";
 import { Reservas } from "./reservas/reservas.js";
 
-export function Router(){
+export function Router() {
     let hash = location.hash;
     let origen = document.querySelector("a[href^='" + hash + "']");
-    if (origen ){
-        if ( origen.className.indexOf('nav-link') >= 0 ) {
+    if (origen) {
+        if (origen.className.indexOf('nav-link') >= 0) {
             document.querySelector('.nav-item .active')?.classList.remove('active');
             document.querySelector("a[href^='" + hash + "']").classList.add('active');
-         }
+        }
     }
 
-    if (hash === '#/usuarios'){
+    if (hash === '#/usuarios') {
         Usuarios();
-    } else if(hash === '#/categorias'){
+    } else if (hash === '#/categorias') {
         Categorias();
-    // } else if(hash === '#/productos'){
-    //     Productos();
-    } else if(hash === '#/destinos'){
+        // } else if(hash === '#/productos'){
+        //     Productos();
+    } else if (hash === '#/destinos') {
         Destinos();
-    // } else if(hash === '#/ventas'){
-    //     Ventas();
-    }else if(hash==='#/reservas'){
+        // } else if(hash === '#/ventas'){
+        //     Ventas();
+    } else if (hash === '#/reservas') {
         Reservas();
-    } else if(hash === '#/register'){         
+    } else if (hash === '#/register') {
         console.log('Register route called');
         Registro();
-    } else if(( hash === '#/home') || (hash === '') || (hash === '#/')){
+    } else if ((hash === '#/home') || (hash === '') || (hash === '#/')) {
         Home();
+    } else if (hash === '#/paquetes') {
+        Paquetes();
+    } else if (hash === '#/ventas') {
+        Ventas();
     }
+    console.log(hash);
+}
 
-    console.log('Current hash:', hash);
+console.log('Current hash:', hash);
 }

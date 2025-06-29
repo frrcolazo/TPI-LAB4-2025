@@ -18,7 +18,6 @@ paquetes_router = APIRouter()
     tags=["Paquetes"],
     status_code=200,
     response_model=list[Paquetes],
-    dependencies=[Depends(JWTBearer())],
 )
 def get_paquetes(db=Depends(get_database_session)):
     result = PaquetesService(db).get_paquetes()

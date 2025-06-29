@@ -18,15 +18,13 @@ class PaquetesService:
         result = self.db.query(PaquetesModel).filter(PaquetesModel.id == id).first()
         return result
 
-    def get_paquetes_by_destino(self, destino: str):
+    def get_paquetes_by_destino(self, destino):
         result = (
             self.db.query(PaquetesModel)
-            .join(PaquetesModel.destino)  # ← join a la tabla relacionada
-            .filter(DestinosModel.nombre == destino)  # ← filtro por campo de la relación
+            .filter(PaquetesModel.destino.nombre == destino)
             .all()
         )
         return result
-
 
     def create_paquetes(self, Paquete: Paquetes):
         new_paquete = PaquetesModel(**Paquete.model_dump())
