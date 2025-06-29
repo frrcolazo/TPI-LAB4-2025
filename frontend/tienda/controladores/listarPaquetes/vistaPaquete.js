@@ -16,12 +16,12 @@ export async function vistaProducto(){
     let d = document;
     let res;
     let carrusel = d.querySelector(".carrusel");
-    let seccionProductos = d.querySelector(".seccionProductos");
+    let seccionPaquetes = d.querySelector(".seccionPaquetes");
     let vistaProducto = d.querySelector(".vistaProducto");
     carrusel.innerHTML = "";
     let seccionLogin = d.querySelector(".seccionLogin");
     seccionLogin.innerHTML = "";
-    seccionProductos.innerHTML = "";
+    seccionPaquetes.innerHTML = "";
     let idProducto = leerParametro();
     
     res = await productosServices.listar(idProducto);
