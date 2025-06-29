@@ -89,10 +89,12 @@ function crearFormulario(registrar){
     let seccionLogin = d.querySelector(".seccionLogin");
     let carrusel = d.querySelector(".carrusel");
     carrusel.innerHTML = '';
-    let seccionProductos = d.querySelector(".seccionProductos");
-    seccionProductos.innerHTML = '';
-    let vistaProducto = d.querySelector(".vistaProducto");
+    let seccionPaquetes = d.querySelector(".seccionPaquetes"); // <--- corregido
+    seccionPaquetes.innerHTML = '';
+    let vistaProducto = d.querySelector(".vistaPaquete");
     vistaProducto.innerHTML = '';
+    let seccionInicio = d.querySelector(".seccionInicio"); // <-- AGREGADO
+    seccionInicio.innerHTML = ''; // <-- AGREGADO
     
     seccionLogin.innerHTML = htmlLogin;
     inputEmail= d.getElementById("loginEmail");
