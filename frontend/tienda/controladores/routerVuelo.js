@@ -34,9 +34,18 @@ export function RouterVuelo() {
     // Acá cargás la vista de reservas activas
     import("./reservas/seccionReservas.js").then(mod => mod.mostrarReservas());
 
+
+
+  } else if (hash === "#destinos") {
+    // Acá cargás el historial
+    import("./destinos/seccionDestinos.js").then(mod => mod.mostrarDestinos());
+
+
   } else if (hash === "#historial") {
     // Acá cargás el historial
     import("./historial/seccionHistorial.js").then(mod => mod.mostrarHistorial());
+
+    
 
   } else {
     // Pantalla de inicio: botones + carruseles

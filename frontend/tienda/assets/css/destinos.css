@@ -1,0 +1,60 @@
+.seccionDestinos {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.destino {
+    min-height: 350px;
+    padding: 2rem 0 4rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.destino-playa {
+    background-image: url("../img/imagen01.webp");
+}
+.destino-nieve {
+    background-image: url("../img/imagen02.jpg");
+}
+.destino-ciudad {
+    background-image: url("../img/imagen03.jpg");
+}
+
+.destino h2 {
+    font-family: 'Work Sans', cursive, sans-serif;
+    font-size: 3rem;
+    color: #f0f8a1;
+    margin-bottom: 2rem;
+    text-align: center;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 8px #222;
+}
+
+.carrusel-destino {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    width: 100%;
+    margin-top: 2rem;
+}
+
+.item-destino {
+    width: 320px;
+    height: 320px;
+    background: #a3a395cc;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.2rem;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
