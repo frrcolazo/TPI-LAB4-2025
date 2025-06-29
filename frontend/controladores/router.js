@@ -5,6 +5,7 @@ import { Usuarios } from "./usuarios/usuarios.js";
 import { Ventas } from "./ventas/ventas.js";
 import { Registro } from "./publico/registro.js";
 import { Destinos } from "./destinos/destinos.js";
+import { Reservas } from "./reservas/reservas.js";
 
 export function Router(){
     let hash = location.hash;
@@ -24,8 +25,10 @@ export function Router(){
     //     Productos();
     } else if(hash === '#/destinos'){
         Destinos();
-    } else if(hash === '#/ventas'){
-        Ventas();
+    // } else if(hash === '#/ventas'){
+    //     Ventas();
+    }else if(hash==='#/reservas'){
+        Reservas();
     } else if(hash === '#/register'){         
         console.log('Register route called');
         Registro();

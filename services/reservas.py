@@ -1,62 +1,47 @@
+from sqlalchemy.orm import Session
 from models.reservas import Reservas as ReservasModel
-from schemas.reservas import Reservas
-from datetime import date
-from models.paquetes import Paquetes as PaquetesModel
+from schemas.reservas import Reservas, ReservasUpdate
+
+
 class ReservasService():
-
-    def __init__(self, db) -> None:
+    
+    def __init__(self, db: Session) -> None:
         self.db = db
+    def get_reservass(self) -> list[ReservasModel]:
+        result = self.db.query(ReservasModel).all()
+        return result
 
-    def get_reservas(self):
-        return self.db.query(ReservasModel).all()
+    def get_reservas(self, id):
+        result = self.db.query(ReservasModel).filter(ReservasModel.id == id).first()
+        return result
 
-    def get_reserva(self, id: int):
-        return self.db.query(ReservasModel).filter(ReservasModel.id == id).first()
-
-    def create_reserva(self, reserva: Reservas):
-        paquete = self.db.query(PaquetesModel).filter(PaquetesModel.id == reserva.paquete_id).first()
-        if paquete.fecha_inicio < reserva.fecha_reserva:
-            return False
+    def create_reservas(self, reserva: Reservas):
         new_reserva = ReservasModel(**reserva.model_dump())
         self.db.add(new_reserva)
         self.db.commit()
-        return True
+        self.db.refresh(new_reserva)
+        return new_reserva  
 
-    def update_reserva(self, id: int, data: Reservas):
-        reserva = self.db.query(ReservasModel).filter(ReservasModel.id == id).first()
-        if reserva:
-            reserva.usuario_id = data.usuario_id
-            reserva.paquete_id = data.paquete_id
-            reserva.fecha_reserva = data.fecha_reserva
-            reserva.cantidad_personas = data.cantidad_personas
-            self.db.commit()
-        return
-
-    def delete_reserva(self, id: int):
-        self.db.query(ReservasModel).filter(ReservasModel.id == id).delete()
+    def update_reservas(self, id, Reserva: Reservas):
+        existing_reserva = self.db.query(ReservasModel).filter(ReservasModel.id == id).first()
+        if not existing_reserva:
+            return None
+        for key, value in Reserva.model_dump().items():
+            setattr(existing_reserva, key, value)
         self.db.commit()
-        return
-
-    def get_reservas_activas_por_usuario(self, usuario_id: int):
-        today = date.today()
-        query = (
-            self.db.query(ReservasModel)
-            .join(PaquetesModel, ReservasModel.paquete_id == PaquetesModel.id)
-            .filter(
-                ReservasModel.usuario_id == usuario_id,
-                PaquetesModel.fecha_fin >= today
-            )
-        )
-        return query.all()
+        return existing_reserva
     
-    def get_reservas_vencidas_por_usuario(self, usuario_id: int):
-        today = date.today()
-        query = (
-            self.db.query(ReservasModel)
-            .join(PaquetesModel, ReservasModel.paquete_id == PaquetesModel.id)
-            .filter(
-                ReservasModel.usuario_id == usuario_id,
-                PaquetesModel.fecha_fin < today
-            )
-        )
-        return query.all()
+    def delete_reservas(self, id) -> ReservasModel:
+        existing_reserva = self.db.query(ReservasModel).filter(ReservasModel.id == id).first()
+        if not existing_reserva:
+            raise ValueError("Reserva no encontrada")
+        self.db.delete(existing_reserva)
+        self.db.commit()
+        return existing_reserva
+
+    def get_reservas_by_usuario(self, idUsuario :int) -> list[ReservasModel]:
+        result = self.db.query(ReservasModel).filter(ReservasModel.idUsuario == idUsuario).all()
+        return result
+    
+
+    #COMPLETAR LO QUE FALTA FELI
