@@ -28,7 +28,7 @@ export function RouterVuelo() {
 
   } else if (hash === "#logout") {
     setUsuarioAutenticado(false, -1);
-    location.replace("index.html"); // adaptalo al nombre de tu archivo
+    location.replace("vuelo.html"); // adaptalo al nombre de tu archivo
 
   } else if (hash === "#reservas") {
     // Acá cargás la vista de reservas activas
