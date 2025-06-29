@@ -22,5 +22,4 @@ class Reservas(BaseModel):
                 }
             ]
         }
-        orm_mode = True
 
