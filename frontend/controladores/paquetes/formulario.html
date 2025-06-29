@@ -1,0 +1,135 @@
+<div class="card card-dark card-outline">
+
+    <form class="needs-validation frmAmPaquete" enctype="multipart/form-data">
+
+        <div class="card-header">
+
+            <div class="col-md-8 offset-md-2">
+
+                <!--=====================================
+                Nombre
+                ======================================-->
+
+                <div class="form-group mt-5">
+
+                    <label>Nombre</label>
+
+                    <input type="text" class="form-control" onchange="validateJS(event,'t&n')" name="nombre"
+                        id="paqueteNombre" required>
+
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+
+                </div>
+
+                <!--=====================================
+                Cupo
+                ======================================-->
+
+                <div class="form-group mt-2">
+
+                    <label>Cupo</label>
+
+                    <input type="number" class="form-control" onchange="validateJS(event,'text')" name="cupo"
+                        id="paqueteCupo" required></input type="number">
+
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+
+                </div>
+
+                <!--=====================================
+                Foto
+                ======================================-->
+
+                <div class="form-group mt-2">
+
+                    <label>Foto</label>
+
+                    <label for="customFile" class="d-flex justify-content-center">
+
+                        <figure class="text-center py-3">
+
+                            <img src="../../img/usuarios/default/anonymous.png" class="img-fluid  changePicture"
+                                style="width:150px">
+
+                        </figure>
+
+                    </label>
+
+                    <div class="custom-file">
+
+                        <input type="file" id="customFile" class="custom-file-input" accept="image/*"
+                            onchange="validateImageJS(event,'changePicture')" name="picture">
+
+                        <div class="valid-feedback">Valid.</div>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+
+                        <label for="customFile" class="custom-file-label">Elegir imágen</label>
+
+                    </div>
+
+                </div>
+
+                <!--=====================================
+                Precio
+                ======================================-->
+
+                <div class="form-group mt-5">
+
+                    <label>Precio</label>
+
+                    <input type="number" step="0.01" class="form-control" name="precio" id="paquetePrecio" required>
+
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+
+                </div>
+
+                <!--=====================================
+                País
+                ======================================-->
+
+                <div class="form-group mt-2">
+
+                    <label>Categoria</label>
+
+
+                    <select class="form-control select2" name="categoria" id="paqueteCategoria" required>
+                        <option value="">Seleccionar Categoría</option>
+
+                    </select>
+
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+
+                </div>
+
+
+
+            </div>
+
+
+        </div>
+
+        <div class="card-footer">
+
+            <div class="col-md-8 offset-md-2">
+
+                <div class="form-group mt-3">
+
+                    <a href="#/paquetes" class="btn btn-light border text-left">Cancelar</a>
+
+                    <button type="submit" class="btn bg-dark float-right">Guardar</button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </form>
+
+
+</div>
