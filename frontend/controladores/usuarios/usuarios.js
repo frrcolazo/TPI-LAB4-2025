@@ -7,9 +7,13 @@ var dtable;
 const htmlUsuarios = 
 `<div class="card">
    <div class="card-header">
-     <h3 class="card-title"> 
-         <a class="btn bg-dark btn-sm btnAgregarUsuario" href="#/newUsuario">Agregar Usuario</a>
-     </h3>
+    <h3 class="card-title">
+        <div class="d-flex flex-wrap">
+            <a class="btn bg-dark btn-sm me-2 mb-2 btnAgregarUsuario" href="#/newUsuario">Agregar Usuario</a>
+            <button class="btn bg-dark btn-sm me-2 mb-2 btnHistorialViaje">Historial de Viaje</button>
+            <button class="btn bg-dark btn-sm mb-2 btnReservaActiva">Reserva Activa por Usuario</button>
+        </div>
+    </h3>
    </div>
    <div class="card-body">            
      <table id="usuariosTable" class="table table-bordered table-striped tableUsuario" width="100%">
@@ -34,11 +38,12 @@ export async function Usuarios(){
     d.querySelector('.contenidoTituloSec').innerHTML = '';
     d.querySelector('.rutaMenu').innerHTML = "Usuarios";
     d.querySelector('.rutaMenu').setAttribute('href',"#/usuarios");
-    let cP =d.getElementById('contenidoPrincipal');
+    let cP = d.getElementById('contenidoPrincipal');
 
     spinner.classList.add("d-flex"); 
 
     let res = await usuariosServices.listar();
+
     res.forEach(element => {
       element.action = `
         <div class='btn-group'>
@@ -51,12 +56,28 @@ export async function Usuarios(){
         </div>`;
     });  
 
+    // 👉 Primero insertás el HTML
     cP.innerHTML = htmlUsuarios;
     llenarTabla(res);
 
+    // 👉 Y luego enganchás los botones que ahora sí existen en el DOM
     d.querySelector(".btnAgregarUsuario").addEventListener("click", agregar);
+    d.querySelector(".btnHistorialViaje").addEventListener("click", async () => {
+        const idUsuario = prompt("Ingrese el ID del usuario para ver su historial de viajes:");
+        if (!idUsuario) return alert("ID de usuario requerido");
+
+        try {
+            const historial = await usuariosServices.getHistorialViajesPorUsuario(idUsuario);
+            mostrarHistorial(historial);
+        } catch (error) {
+            console.error("Error obteniendo historial:", error);
+            alert("Error al obtener el historial de viajes");
+        }
+    });
+
     spinner.classList.replace("d-flex", "d-none");   
 }
+
 
 function enlazarEventos(){
     let d = document;
@@ -127,4 +148,67 @@ function llenarTabla(res){
             }
         }
     });
+}
+
+function mostrarHistorial(historial) {
+    let d = document;
+
+    // Si ya existe, elimino tabla previa
+    const contAnterior = d.getElementById('historialContainer');
+    if (contAnterior) contAnterior.remove();
+
+    // Creo un contenedor para la tabla
+    const container = d.createElement('div');
+    container.id = 'historialContainer';
+    container.className = 'card mt-3';
+
+    let tablaHTML = `
+        <div class="card-header"><h3 class="card-title">Historial de Viajes</h3></div>
+        <div class="card-body table-responsive p-0" style="max-height: 400px;">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Paquete</th>
+                    <th>Destino</th>
+                    <th>Fecha Inicio</th>
+                    <th>Fecha Fin</th>
+                    <th>Fecha Reserva</th>
+                    <th>Cantidad Personas</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    if (historial.length === 0) {
+        tablaHTML += `<tr><td colspan="8" class="text-center">No hay historial para este usuario.</td></tr>`;
+    } else {
+        historial.forEach(item => {
+            tablaHTML += `
+                <tr>
+                    <td>${item.nombre}</td>
+                    <td>${item.apellido}</td>
+                    <td>${item.paquete_nombre}</td>
+                    <td>${item.destino_nombre}</td>
+                    <td>${item.fecha_inicio ?? ''}</td>
+                    <td>${item.fecha_fin ?? ''}</td>
+                    <td>${item.fecha_reserva ?? ''}</td>
+                    <td>${item.cantidad_personas ?? ''}</td>
+                </tr>
+            `;
+        });
+    }
+
+    tablaHTML += `
+            </tbody>
+        </table>
+        </div>
+    `;
+
+    container.innerHTML = tablaHTML;
+
+    // Lo inserto debajo de la tabla de usuarios
+    const cP = d.getElementById('contenidoPrincipal');
+    cP.appendChild(container);
 }

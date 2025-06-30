@@ -130,3 +130,9 @@ def delete_usuarios(id: int, db = Depends(get_database_session))-> dict:
     UsuariosService(db).delete_usuarios(id)
     return JSONResponse(status_code=200, content={"message": "Se ha eliminado el usuario"})
 
+@usuarios_router.get('/usuarios/{usuario_id}/historial', tags=['Usuarios'], status_code=200)
+def get_historial_viajes(usuario_id: int, db = Depends(get_database_session)):
+    result = UsuariosService(db).get_historial_viajes_por_usuario(usuario_id)
+    if not result:
+        raise HTTPException(status_code=404, detail="No se encontró historial para el usuario")
+    return JSONResponse(status_code=200, content=jsonable_encoder(result))

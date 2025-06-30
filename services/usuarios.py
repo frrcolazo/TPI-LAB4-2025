@@ -2,6 +2,7 @@ from models.usuarios import Usuarios as UsuariosModel
 from schemas.usuarios import Usuarios
 from models.reservas import Reservas as ReservasModel
 from models.paquetes import Paquetes as PaquetesModel
+from models.destinos import Destinos as DestinosModel
 from datetime import date
 from sqlalchemy import func, desc
 
@@ -61,3 +62,38 @@ class UsuariosService():
             .limit(1)
         )
         return query.first()
+    
+    def get_historial_viajes_por_usuario(self, usuario_id: int):
+        query = (
+            self.db.query(
+                UsuariosModel.id.label("usuario_id"),
+                UsuariosModel.nombre,
+                UsuariosModel.apellido,
+                PaquetesModel.nombre.label("paquete_nombre"),
+                DestinosModel.nombre.label("destino_nombre"),
+                PaquetesModel.fecha_inicio,
+                PaquetesModel.fecha_fin,
+                ReservasModel.fecha_reserva,
+                ReservasModel.cantidad_personas
+            )
+            .join(ReservasModel, UsuariosModel.id == ReservasModel.idUsuario)
+            .join(PaquetesModel, ReservasModel.idPaquete == PaquetesModel.id)
+            .join(DestinosModel, PaquetesModel.destino_id == DestinosModel.id)
+            .filter(UsuariosModel.id == usuario_id)
+            .order_by(ReservasModel.fecha_reserva.desc())
+        )
+        results = query.all()
+        historial = []
+        for row in results:
+            historial.append({
+                "usuario_id": row.usuario_id,
+                "nombre": row.nombre,
+                "apellido": row.apellido,
+                "paquete_nombre": row.paquete_nombre,
+                "destino_nombre": row.destino_nombre,
+                "fecha_inicio": row.fecha_inicio,
+                "fecha_fin": row.fecha_fin,
+                "fecha_reserva": row.fecha_reserva,
+                "cantidad_personas": row.cantidad_personas,
+            })
+        return historial

@@ -48,7 +48,22 @@ async function listar(id) {
         }
     }).then(respuesta => respuesta.json());
 }
-
+async function getHistorialViajesPorUsuario(idUsuario) {
+    const urlHistorial = `${url}/${idUsuario}/historial`;
+    return await fetch(urlHistorial, {
+        method: 'GET',
+        headers: {
+            "accept": "application/json",
+            "Authorization": "Bearer " + localStorage.getItem('token')
+        }
+    }).then(async respuesta => {
+        if (!respuesta.ok) {
+            const errText = await respuesta.text();
+            throw new Error(`Error HTTP ${respuesta.status}: ${errText}`);
+        }
+        return respuesta.json();
+    });
+}
 async function crear(apellido, nombre, correo, password, role = "Cliente") {
     const response = await fetch(url, {
         method: 'POST',
@@ -108,5 +123,6 @@ export const usuariosServices = {
     topReservas,
     crear,
     editar,
-    borrar
+    borrar,
+    getHistorialViajesPorUsuario
 };
