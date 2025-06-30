@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
 from models.reservas import Reservas as ReservasModel
-from schemas.reservas import Reservas, ReservasUpdate
-
+from models.paquetes import Paquetes as PaquetesModel  
+from schemas.reservas import Reservas
+from datetime import date  
 
 class ReservasService():
     
@@ -16,18 +17,68 @@ class ReservasService():
         return result
 
     def create_reservas(self, reserva: Reservas):
+        # Validar paquete existe
+        paquete = self.db.query(PaquetesModel).filter(PaquetesModel.id == reserva.idPaquete).first()
+        if not paquete:
+            raise ValueError("Paquete no encontrado")
+
+        hoy = date.today()
+        if reserva.fecha_reserva < hoy:
+            raise ValueError("La fecha de reserva no puede ser anterior a hoy")
+
+        if reserva.fecha_reserva < paquete.fecha_inicio:
+            raise ValueError("La fecha de reserva debe ser igual o posterior a la fecha de inicio del paquete")
+
+        # Verificar cupo disponible
+        # Obtener todas las reservas existentes para el paquete y la fecha
+        reservas_existentes = self.db.query(ReservasModel).filter(
+            ReservasModel.idPaquete == reserva.idPaquete,
+            ReservasModel.fecha_reserva == reserva.fecha_reserva
+        ).all()
+
+        personas_reservadas = sum(r.cantidad_personas for r in reservas_existentes)
+        cupo_disponible = paquete.cupo_total - personas_reservadas
+
+        if reserva.cantidad_personas > cupo_disponible:
+            raise ValueError(f"No hay cupo suficiente. Cupo disponible: {cupo_disponible}")
+
         new_reserva = ReservasModel(**reserva.model_dump())
         self.db.add(new_reserva)
         self.db.commit()
         self.db.refresh(new_reserva)
-        return new_reserva  
+        return new_reserva
 
-    def update_reservas(self, id, Reserva: Reservas):
+    def update_reservas(self, id, reserva: Reservas):
         existing_reserva = self.db.query(ReservasModel).filter(ReservasModel.id == id).first()
         if not existing_reserva:
             return None
-        for key, value in Reserva.model_dump().items():
+        
+        paquete = self.db.query(PaquetesModel).filter(PaquetesModel.id == reserva.idPaquete).first()
+        if not paquete:
+            raise ValueError("Paquete no encontrado")
+
+        hoy = date.today()
+        if reserva.fecha_reserva < hoy:
+            raise ValueError("La fecha de reserva no puede ser anterior a hoy")
+
+        if reserva.fecha_reserva < paquete.fecha_inicio:
+            raise ValueError("La fecha de reserva debe ser igual o posterior a la fecha de inicio del paquete")
+
+        reservas_existentes = self.db.query(ReservasModel).filter(
+            ReservasModel.idPaquete == reserva.idPaquete,
+            ReservasModel.fecha_reserva == reserva.fecha_reserva,
+            ReservasModel.id != id  # Excluir la reserva que se está actualizando
+        ).all()
+
+        personas_reservadas = sum(r.cantidad_personas for r in reservas_existentes)
+        cupo_disponible = paquete.cupo_total - personas_reservadas
+
+        if reserva.cantidad_personas > cupo_disponible:
+            raise ValueError(f"No hay cupo suficiente. Cupo disponible: {cupo_disponible}")
+
+        for key, value in reserva.model_dump().items():
             setattr(existing_reserva, key, value)
+
         self.db.commit()
         return existing_reserva
     
