@@ -72,10 +72,27 @@ async function listarPorDestino(nombre_destino) {
         .then(respuesta => respuesta.json());
 
 }
+
+async function obtenerPaqueteMasReservado() {
+    const urlMasReservado = url + "/mas-reservados";
+    return await fetch(urlMasReservado, {
+        headers: {
+            "Accept": "application/json"
+        }
+    })
+    .then(respuesta => {
+        if (!respuesta.ok) {
+            throw new Error("Paquete no encontrado");
+        }
+        return respuesta.json();
+    });
+}
+
 export const paquetesServices = {
     listar,
     crear,
     editar,
     borrar,
-    listarPorDestino
+    listarPorDestino,
+    obtenerPaqueteMasReservado
 }

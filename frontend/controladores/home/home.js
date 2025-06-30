@@ -2,6 +2,7 @@ import { usuariosServices } from "../../servicios/usuarios-servicios.js";
 import { ventasServices } from "../../servicios/ventas-servicios.js";
 import { paquetesServices } from "../../servicios/paquetes-servicios.js";
 import { destinosServices } from "../../servicios/destinos-servicios.js";
+import { reservasServices } from "../../servicios/reservas-servicios.js";
 const htmlHome =
     ` <div class="row" >
     <div class="col-lg-3 col-6">
@@ -56,7 +57,7 @@ const htmlHome =
             <div class="inner">
             <h3 id="indPaquetes">65</h3>
 
-            <p>Paquetes</p>
+            <p>Paquete más reservado</p>
             </div>
             <div class="icon">
             <i class="ion ion-pie-graph"></i>
@@ -101,9 +102,8 @@ export async function Home() {
         const resSinDespachar = await ventasServices.listarVentasDespachadas(false);
         indSinDespachar.innerHTML = resSinDespachar.length ?? 0;
 
-        // Cantidad de paquetes
-        const resPaquetes = await paquetesServices.listar();
-        indPaquetes.innerHTML = resPaquetes.length ?? 0;
+        const paqueteMasReservado = await paquetesServices.obtenerPaqueteMasReservado();
+        indPaquetes.innerHTML = paqueteMasReservado?.nombre ?? "Sin datos";
 
     } catch (error) {
         console.error("Error cargando datos Home:", error);
