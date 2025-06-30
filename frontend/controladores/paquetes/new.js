@@ -1,109 +1,106 @@
 import { destinosServices } from "../../servicios/destinos-servicios.js";
 import { paquetesServices } from "../../servicios/paquetes-servicios.js";
 
-var formulario = '';
 
-var txtNombre = '';
-var txtCupo = '';
-var fileFoto = '';
-var selCategoria = '';
-var txtPrecio = '';
-
-var idPaquete;
 export async function newRegister() {
     let d = document;
 
     d.querySelector('.contenidoTitulo').innerHTML = 'Agregar Paquete';
     d.querySelector('.contenidoTituloSec').innerHTML += 'Agregar';
-    crearFormulario();
+    await crearFormulario();
 
-    formulario = d.querySelector(".frmAmPaquete")
+    const formulario = d.querySelector(".frmAmPaquete");
     formulario.addEventListener("submit", guardar);
 }
 
 export async function editRegister(id) {
-    let d = document;
-    idPaquete = id;
+    const d = document;
     d.querySelector('.contenidoTitulo').innerHTML = 'Editar Paquete';
     d.querySelector('.contenidoTituloSec').innerHTML += 'Editar';
-    crearFormulario();
 
-    formulario = d.querySelector(".frmAmPaquete")
-    formulario.addEventListener("submit", modificar);
-    let paquete = await paquetesServices.listar(id);
+    await crearFormulario();
 
+    const paquete = await paquetesServices.listar(id);
+    console.log(paquete)
+    const formulario = d.querySelector(".frmAmPaquete");
+    formulario.addEventListener("submit", (e) => {
+        e.preventDefault()
+        modificar(id)
+    });
 
-    txtCupo.value = paquete.descripcion;
-    txtNombre.value = paquete.nombre;
-
-    if (paquete.foto.length > 0)
-        fileFoto.src = paquete.foto;
-    selCategoria.value = paquete.idCategoria;
-    txtPrecio.value = paquete.precio;
-
+    d.getElementById('paqueteNombre').value = paquete.nombre;
+    d.getElementById('paqueteCupo').value = paquete.cupo;
+    d.getElementById('paqueteFechaInicio').value = paquete.fecha_inicio;
+    d.getElementById('paqueteFechaFin').value = paquete.fecha_fin;
+    d.getElementById('paquetePrecio').value = paquete.precio;
+    d.getElementById('paqueteDestino').value = paquete.id_destino;
 }
 
 async function crearFormulario() {
-    let d = document;
+    const d = document;
+
     d.querySelector('.rutaMenu').innerHTML = "Paquetes";
     d.querySelector('.rutaMenu').setAttribute('href', "#/paquetes");
 
-    let cP = d.getElementById('contenidoPrincipal');
-    cP.innerHTML = await fetch('./formulario.html').then(response => response.text())
+    const cP = d.getElementById('contenidoPrincipal');
+    cP.innerHTML = await fetch('/controladores/paquetes/formulario.html').then(res => res.text());
 
-    var script = document.createElement("script");
+    await new Promise(r => requestAnimationFrame(r));
+    // Cargar select de destinos
+    const selDestino = d.getElementById('paqueteDestino');
+    const destinos = await destinosServices.listar();
+    destinos.forEach(element => {
+        const opcion = d.createElement('option');
+        opcion.value = element.id;
+        opcion.text = element.nombre;
+        selDestino.appendChild(opcion);
+    });
+
+    // Cargar validaciones
+    const script = d.createElement("script");
     script.type = "text/javascript";
     script.src = '../controladores/validaciones.js';
     cP.appendChild(script);
-
-    txtCupo = d.getElementById('paqueteCupo');
-    txtNombre = d.getElementById('paqueteNombre');
-    fileFoto = d.querySelector('.changePicture');
-    txtPrecio = d.getElementById('paquetePrecio');
-    selCategoria = d.getElementById('paqueteCategoria');
-
-    /*Cargar categorías en select*/
-    let res = await destinosServices.listar();
-    res.forEach(element => {
-        let opcion = d.createElement('option');
-        opcion.value = element.id;
-        opcion.text = element.descripcion;
-        selCategoria.appendChild(opcion);
-    });
 }
+
 
 function guardar(e) {
-
     e.preventDefault();
 
-    var categoria = selCategoria.options[selCategoria.selectedIndex];
-
-
-    paquetesServices.crear(txtNombre.value, txtCupo.value, fileFoto.src, txtPrecio.value,
-        categoria.value, categoria.text)
-        .then(respuesta => {
-
+    const d = document;
+    const formulario = d.querySelector(".frmAmPaquete");
+    const nombre = d.getElementById('paqueteNombre').value;
+    const cupo = d.getElementById('paqueteCupo').value;
+    const fechaInicio = d.getElementById('paqueteFechaInicio').value;
+    const fechaFin = d.getElementById('paqueteFechaFin').value;
+    const precio = d.getElementById('paquetePrecio').value;
+    const selDestino = d.getElementById('paqueteDestino');
+    const destino = selDestino.options[selDestino.selectedIndex].value;
+    console.log(selDestino + selDestino.selectedIndex)
+    paquetesServices.crear(nombre, fechaInicio, fechaFin, cupo, precio, destino)
+        .then(() => {
             formulario.reset();
             window.location.href = "#/paquetes";
-
         })
-        .catch(error => console.log(error))
-
+        .catch(error => console.log(error));
 }
 
-function modificar(e) {
+function modificar(id) {
 
-    e.preventDefault();
+    const d = document;
+    const formulario = d.querySelector(".frmAmPaquete");
+    const nombre = d.getElementById('paqueteNombre').value;
+    const cupo = d.getElementById('paqueteCupo').value;
+    const fechaInicio = d.getElementById('paqueteFechaInicio').value;
+    const fechaFin = d.getElementById('paqueteFechaFin').value;
+    const precio = d.getElementById('paquetePrecio').value;
+    const selDestino = d.getElementById('paqueteDestino');
+    const destino = selDestino.options[selDestino.selectedIndex].value;
 
-    var categoria = selCategoria.options[selCategoria.selectedIndex];
-    paquetesServices.editar(idPaquete, txtNombre.value, txtCupo.value, fileFoto.src, txtPrecio.value,
-        categoria.value, categoria.text)
-        .then(respuesta => {
-
+    paquetesServices.editar(id, nombre, fechaInicio, fechaFin, cupo, precio, destino)
+        .then(() => {
             formulario.reset();
             window.location.href = "#/paquetes";
-
         })
-        .catch(error => console.log(error))
-
-}   
+        .catch(error => console.log(error));
+}
