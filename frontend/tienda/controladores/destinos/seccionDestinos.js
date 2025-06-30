@@ -187,3 +187,7 @@ window.moverCarrusel = function(tipo, direccion) {
 
     carrusel.innerHTML = itemsCarrusel;
 };
+
+window.verPaquetes = function(idDestino) {
+    location.hash = `#paquetes/${idDestino}`;
+}

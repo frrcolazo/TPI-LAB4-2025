@@ -45,6 +45,11 @@ export function RouterVuelo() {
     // Acá cargás el historial
     import("./historial/seccionHistorial.js").then(mod => mod.mostrarHistorial());
 
+} else if (hash.startsWith("#paquetes/")) {
+    const idDestino = hash.split("/")[1];
+    import("./destinos/vistaPaquetes.js")
+        .then(mod => mod.vistaPaquetes(idDestino));
+
     
 
   } else {
