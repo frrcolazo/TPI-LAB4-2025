@@ -1,7 +1,7 @@
 import { usuariosServices } from "../../servicios/usuarios-servicios.js";
-import { ventasServices } from "../../servicios/ventas-servicios.js";
 import { paquetesServices } from "../../servicios/paquetes-servicios.js";
 import { destinosServices } from "../../servicios/destinos-servicios.js";
+import { reservasServices } from "../../servicios/reservas-servicios.js";
 const htmlHome =
     ` <div class="row" >
     <div class="col-lg-3 col-6">
@@ -23,9 +23,9 @@ const htmlHome =
         <!-- small box -->
         <div class="small-box bg-success">
             <div class="inner">
-            <h3 id="indSindespachar">53</h3>
+            <h3 id="indReservas">53</h3>
 
-            <p>Sin despachar</p>
+            <p>Cantidad Reservas Activas</p>
             </div>
             <div class="icon">
             <i class="ion ion-stats-bars"></i>
@@ -56,7 +56,7 @@ const htmlHome =
             <div class="inner">
             <h3 id="indPaquetes">65</h3>
 
-            <p>Paquetes</p>
+            <p>Paquete más reservado</p>
             </div>
             <div class="icon">
             <i class="ion ion-pie-graph"></i>
@@ -80,7 +80,7 @@ export async function Home() {
     cP.innerHTML = htmlHome;
 
     const indDestinos = d.getElementById("indDestinos");
-    const indSinDespachar = d.getElementById("indSindespachar");
+    const indReservas = d.getElementById("indReservas");
     const cantReservasUsuario = d.getElementById("cantReservasUsuario");
     const nombreUsuarioTop = d.getElementById("nombreUsuarioTop");
     const indPaquetes = d.getElementById("indPaquetes");
@@ -98,12 +98,11 @@ export async function Home() {
         indDestinos.innerHTML = resDestinos.total_destinos ?? 0;
 
         // Cantidad de ventas sin despachar
-        const resSinDespachar = await ventasServices.listarVentasDespachadas(false);
-        indSinDespachar.innerHTML = resSinDespachar.length ?? 0;
+        const resReservas = await reservasServices.obtenerTotalReservasActivas();
+        indReservas.innerHTML = resReservas.total_reservas_activas ?? 0;
 
-        // Cantidad de paquetes
-        const resPaquetes = await paquetesServices.listar();
-        indPaquetes.innerHTML = resPaquetes.length ?? 0;
+        const paqueteMasReservado = await paquetesServices.obtenerPaqueteMasReservado();
+        indPaquetes.innerHTML = paqueteMasReservado?.nombre ?? "Sin datos";
 
     } catch (error) {
         console.error("Error cargando datos Home:", error);
@@ -111,7 +110,7 @@ export async function Home() {
         cantReservasUsuario.innerHTML = 0;
         nombreUsuarioTop.innerHTML = "Error";
         indDestinos.innerHTML = 0;
-        indSinDespachar.innerHTML = 0;
+        indReservas.innerHTML = 0;
         indPaquetes.innerHTML = 0;
     } finally {
         spinner.classList.replace("d-flex", "d-none");

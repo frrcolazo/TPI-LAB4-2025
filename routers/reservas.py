@@ -21,6 +21,10 @@ def get_reservass(db = Depends(get_database_session)) -> List[Reservas]:
     reservas_schemas = [Reservas.model_validate(reserva, from_attributes=True) for reserva in result]
     return reservas_schemas
 
+@reservas_router.get('/reservas/activas/total',tags=['Reservas'],response_model=dict,status_code=200)
+def get_total_reservas_activas(db = Depends(get_database_session)) -> dict:
+    total = ReservasService(db).get_total_reservas_activas()
+    return {"total_reservas_activas": total}
 
 @reservas_router.get('/reservas/{id}', tags=['Reservas'], response_model=Reservas)
 def get_reservas(id: int = Path(ge=1, le=2000), db = Depends(get_database_session)):
