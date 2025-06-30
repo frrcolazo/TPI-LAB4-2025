@@ -50,7 +50,7 @@ async function listar(id) {
 }
 
 async function crear(apellido, nombre, correo, password, role = "Cliente") {
-    return await fetch(url, {
+    const response = await fetch(url, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
@@ -62,12 +62,18 @@ async function crear(apellido, nombre, correo, password, role = "Cliente") {
             password,
             role
         })
-    }).then(respuesta => respuesta.json());
+    });
+    
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(data.detail || 'Error al crear usuario');
+    }
+    return data;
 }
 
 async function editar(id, apellido, nombre, correo, password, role = "Cliente") {
     let urlPut = url + "/" + id;
-    return await fetch(urlPut, {
+    const response = await fetch(urlPut, {
         method: 'PUT',
         headers: {
             "Content-Type": "application/json"
@@ -79,7 +85,13 @@ async function editar(id, apellido, nombre, correo, password, role = "Cliente") 
             password,
             role
         })
-    }).then(respuesta => respuesta.json());
+    });
+    
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(data.detail || 'Error al editar usuario');
+    }
+    return data;
 }
 
 async function borrar(id) {

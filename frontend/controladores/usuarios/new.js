@@ -19,7 +19,7 @@ const htmlAmUsuarios = `
         </div>
         <div class="form-group mt-2">
           <label>Password</label>
-          <input type="password" class="form-control" name="password" id="usuarioPassword" required>
+          <input type="password" class="form-control" name="password" id="usuarioPassword" required placeholder="Ingrese nueva contraseña">
         </div>
         <div class="form-group mt-2">
           <label>Rol</label>
@@ -65,7 +65,7 @@ export async function editRegister(id){
     txtNombre.value = usuario.nombre;
     txtApellido.value = usuario.apellido;
     txtCorreo.value = usuario.correo;
-    txtPass.value = usuario.password;
+    txtPass.value = '';
     selRole.value = usuario.role;
 }
 
@@ -83,6 +83,17 @@ function crearFormulario(){
 
 function guardar(e) {
     e.preventDefault();
+    
+    // Client-side password validation
+    if (txtPass.value.length < 8) {
+        alert('La contraseña debe tener al menos 8 caracteres');
+        return;
+    }
+    if (!/[A-Z]/.test(txtPass.value)) {
+        alert('La contraseña debe contener al menos una letra mayúscula');
+        return;
+    }
+    
     usuariosServices.crear(
         txtApellido.value,
         txtNombre.value,
@@ -90,15 +101,35 @@ function guardar(e) {
         txtPass.value,
         selRole.value
     )
-    .then(() => {
-        formulario.reset();
-        window.location.href = "#/usuarios";
+    .then(response => {
+        if (response.message) {
+            formulario.reset();
+            window.location.href = "#/usuarios";
+        } else if (response.detail) {
+            alert('Error: ' + response.detail);
+        }
     })
-    .catch(error => console.log(error));
+    .catch(error => {
+        console.log(error);
+        alert('Error al crear usuario. Verifique los datos ingresados.');
+    });
 }
 
 function modificar(e) {
     e.preventDefault();
+    
+    // Client-side password validation (only if password is provided)
+    if (txtPass.value && txtPass.value.length > 0) {
+        if (txtPass.value.length < 8) {
+            alert('La contraseña debe tener al menos 8 caracteres');
+            return;
+        }
+        if (!/[A-Z]/.test(txtPass.value)) {
+            alert('La contraseña debe contener al menos una letra mayúscula');
+            return;
+        }
+    }
+    
     usuariosServices.editar(
         idUsuario,
         txtApellido.value,
@@ -107,9 +138,16 @@ function modificar(e) {
         txtPass.value,
         selRole.value
     )
-    .then(() => {
-        formulario.reset();
-        window.location.href = "#/usuarios";
+    .then(response => {
+        if (response.message) {
+            formulario.reset();
+            window.location.href = "#/usuarios";
+        } else if (response.detail) {
+            alert('Error: ' + response.detail);
+        }
     })
-    .catch(error => console.log(error));
+    .catch(error => {
+        console.log(error);
+        alert('Error al modificar usuario. Verifique los datos ingresados.');
+    });
 }

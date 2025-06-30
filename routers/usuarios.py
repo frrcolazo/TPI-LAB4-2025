@@ -106,16 +106,18 @@ def create_usuarios(usuario: Usuarios, db = Depends(get_database_session)) -> di
 
 
 @usuarios_router.put('/usuarios/{id}', tags=['Usuarios'], response_model=dict, status_code=200)
-def update_usuarios(id: int, Usuarios: Usuarios, db = Depends(get_database_session))-> dict:
-    #db = Session()
+def update_usuarios(id: int, usuario: Usuarios, db = Depends(get_database_session)) -> dict:
     result = UsuariosService(db).get_usuario(id)
     if not result:
         return JSONResponse(status_code=404, content={'message': "No encontrado"})
-    Usuarios.password = get_password_hash(Usuarios.password)
-    existing_user = UsuariosService(db).get_usuarios_by_mail_first(Usuarios.correo)
+
+    usuario.password = get_password_hash(usuario.password)
+
+    existing_user = UsuariosService(db).get_usuarios_by_mail_first(usuario.correo)
     if existing_user and existing_user.id != id:
-        raise HTTPException(status_code=400, detail=f"El correo {existing_user} ya está registrado")
-    UsuariosService(db).update_usuarios(id, Usuarios)
+        raise HTTPException(status_code=400, detail=f"El correo {usuario.correo} ya está registrado")
+
+    UsuariosService(db).update_usuarios(id, usuario)
     return JSONResponse(status_code=200, content={"message": "Se ha modificado el usuario"})
 
 
