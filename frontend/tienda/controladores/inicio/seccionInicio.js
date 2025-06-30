@@ -1,6 +1,8 @@
+import { mostrarSolo } from "../../utils/utils.js";
+
 export function cargarSeccionInicio() {
+    mostrarSolo("seccionInicio");
     const seccion = document.querySelector('.seccionInicio');
-    seccion.style.display = ""; // <-- MOSTRAR
     seccion.innerHTML = `
         <h1 class="titulo">TU VUELO</h1>
         <a href="#destinos" class="btnAcceso principal">Encontrá tu próximo destino</a>

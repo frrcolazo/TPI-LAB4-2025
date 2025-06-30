@@ -1,3 +1,8 @@
+import { mostrarSolo } from "../../utils/utils.js";
+
+// Por ejemplo, en el controlador de login:
+mostrarSolo("seccionReservas");
+// Ahora cargas el contenido de login en esa sección
 export function mostrarReservas() {
     const d = document;
     // Limpiar/ocultar otras secciones
