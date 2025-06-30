@@ -81,7 +81,7 @@ export async function Home() {
     cP.innerHTML = htmlHome;
 
     const indDestinos = d.getElementById("indDestinos");
-    const indSinDespachar = d.getElementById("indSindespachar");
+    const indReservas = d.getElementById("indReservas");
     const cantReservasUsuario = d.getElementById("cantReservasUsuario");
     const nombreUsuarioTop = d.getElementById("nombreUsuarioTop");
     const indPaquetes = d.getElementById("indPaquetes");
@@ -99,8 +99,8 @@ export async function Home() {
         indDestinos.innerHTML = resDestinos.total_destinos ?? 0;
 
         // Cantidad de ventas sin despachar
-        const resSinDespachar = await ventasServices.listarVentasDespachadas(false);
-        indSinDespachar.innerHTML = resSinDespachar.length ?? 0;
+        const resReservas = await ventasServices.listarVentasDespachadas(false);
+        indReservas.innerHTML = resReservas.length ?? 0;
 
         const paqueteMasReservado = await paquetesServices.obtenerPaqueteMasReservado();
         indPaquetes.innerHTML = paqueteMasReservado?.nombre ?? "Sin datos";
@@ -111,7 +111,7 @@ export async function Home() {
         cantReservasUsuario.innerHTML = 0;
         nombreUsuarioTop.innerHTML = "Error";
         indDestinos.innerHTML = 0;
-        indSinDespachar.innerHTML = 0;
+        indReservas.innerHTML = 0;
         indPaquetes.innerHTML = 0;
     } finally {
         spinner.classList.replace("d-flex", "d-none");
