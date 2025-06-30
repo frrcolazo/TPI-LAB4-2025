@@ -8,7 +8,7 @@ from models.paquetes import Paquetes as PaquetesModel
 from fastapi.encoders import jsonable_encoder
 from middlewares.jwt_bearer import JWTBearer
 from services.paquetes import PaquetesService
-from schemas.paquetes import Paquetes
+from schemas.paquetes import Paquetes, PaquetesPOST
 
 paquetes_router = APIRouter()
 
@@ -22,6 +22,16 @@ paquetes_router = APIRouter()
 def get_paquetes(db=Depends(get_database_session)):
     result = PaquetesService(db).get_paquetes()
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
+
+
+@paquetes_router.get(
+    "/paquetes/mas-reservados", tags=["Paquetes"], response_model=Paquetes
+)
+def get_paquete_mas_reservado(db=Depends(get_database_session)) -> Paquetes:
+    result = PaquetesService(db).get_paquete_mas_reservado()
+    if not result:
+        raise HTTPException(404, "Paquete no encontrado")
+    return Paquetes.model_validate(result)
 
 
 @paquetes_router.get("/paquetes/{id}", tags=["Paquetes"], response_model=Paquetes)
@@ -45,7 +55,7 @@ def get_paquetes_by_nombre_destino(
 @paquetes_router.post(
     "/paquetes", tags=["Paquetes"], response_model=dict, status_code=201
 )
-def create_paquetes(paquete: Paquetes, db=Depends(get_database_session)):
+def create_paquetes(paquete: PaquetesPOST, db=Depends(get_database_session)):
     PaquetesService(db).create_paquetes(paquete)
     return JSONResponse(
         status_code=201, content={"message": "Se ha registrado el paquete"}
@@ -55,7 +65,7 @@ def create_paquetes(paquete: Paquetes, db=Depends(get_database_session)):
 @paquetes_router.put(
     "/paquetes/{id}", tags=["Paquetes"], response_model=dict, status_code=200
 )
-def update_paquetes(id: int, Paquetes: Paquetes, db=Depends(get_database_session)):
+def update_paquetes(id: int, Paquetes: PaquetesPOST, db=Depends(get_database_session)):
     result = PaquetesService(db).update_paquetes(id, Paquetes)
 
     if not result:

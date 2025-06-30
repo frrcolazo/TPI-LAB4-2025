@@ -69,12 +69,11 @@ def usuario_con_mas_reservas(db = Depends(get_database_session)):
     if not result:
         return JSONResponse(status_code=404, content={"message": "No se encontraron usuarios con reservas"})
     
-    # Desempaquetar la tupla para mejor claridad
-    usuario_id, nombre, cantidad_reservas = result
+    usuario_id, nombre, apellido, cantidad_reservas = result
     
     return JSONResponse(status_code=200, content=jsonable_encoder({
         "id": usuario_id,
-        "nombre": nombre,
+        "nombre": f"{nombre} {apellido}",
         "cantidad_reservas": cantidad_reservas
     }))
 @usuarios_router.get('/usuarios/{id}', tags=['Usuarios'], response_model=UsuarioBase)
@@ -107,16 +106,18 @@ def create_usuarios(usuario: Usuarios, db = Depends(get_database_session)) -> di
 
 
 @usuarios_router.put('/usuarios/{id}', tags=['Usuarios'], response_model=dict, status_code=200)
-def update_usuarios(id: int, Usuarios: Usuarios, db = Depends(get_database_session))-> dict:
-    #db = Session()
+def update_usuarios(id: int, usuario: Usuarios, db = Depends(get_database_session)) -> dict:
     result = UsuariosService(db).get_usuario(id)
     if not result:
         return JSONResponse(status_code=404, content={'message': "No encontrado"})
-    Usuarios.password = get_password_hash(Usuarios.password)
-    existing_user = UsuariosService(db).get_usuarios_by_mail_first(Usuarios.correo)
+
+    usuario.password = get_password_hash(usuario.password)
+
+    existing_user = UsuariosService(db).get_usuarios_by_mail_first(usuario.correo)
     if existing_user and existing_user.id != id:
-        raise HTTPException(status_code=400, detail=f"El correo {existing_user} ya está registrado")
-    UsuariosService(db).update_usuarios(id, Usuarios)
+        raise HTTPException(status_code=400, detail=f"El correo {usuario.correo} ya está registrado")
+
+    UsuariosService(db).update_usuarios(id, usuario)
     return JSONResponse(status_code=200, content={"message": "Se ha modificado el usuario"})
 
 

@@ -15,6 +15,15 @@ async function listar(id) {
     })
     .then(respuesta => respuesta.json());
 }
+async function obtenerTotalDestinos() {
+    const urlTotal = url + "/total";
+    return await fetch(urlTotal, {
+        headers: {
+            "Accept": "application/json"
+        }
+    })
+    .then(respuesta => respuesta.json());
+}
 
 async function crear({ nombre, descripcion, pais }) {
     return await fetch(url, {
@@ -59,5 +68,6 @@ export const destinosServices = {
     listar,
     crear,
     editar,
-    borrar
+    borrar,
+    obtenerTotalDestinos
 }
