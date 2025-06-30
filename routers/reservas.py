@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi import Depends, Path, Query, HTTPException,UploadFile, File
 from pydantic import BaseModel, Field
-from typing import Optional, List
+from typing import List
 from config.database import get_database_session
 from models.reservas import Reservas as ReservasModel
 from fastapi.encoders import jsonable_encoder
@@ -10,7 +10,7 @@ from services.reservas import ReservasService
 import os
 import shutil
 from services.reservas import ReservasService
-from schemas.reservas import Reservas
+from schemas.reservas import Reservas, ReservasUpdate
 
 reservas_router = APIRouter()
 
@@ -42,7 +42,7 @@ def create_reservas(reserva: Reservas, db=Depends(get_database_session)) -> Rese
 
 # --- Actualizar reserva ---
 @reservas_router.put('/reservas/{id}', tags=['Reservas'], response_model=Reservas, status_code=200)
-def update_reservas(id: int, reserva: Reservas, db=Depends(get_database_session)) -> Reservas:
+def update_reservas(id: int, reserva: ReservasUpdate, db=Depends(get_database_session)) -> Reservas:
     result = ReservasService(db).get_reservas(id)
     if not result:
         raise HTTPException(status_code=404, detail="No encontrado")
