@@ -1,8 +1,6 @@
-import { Categorias } from "./categorias/categorias.js";
 import { Home } from "./home/home.js";
 import { Paquetes } from "./paquetes/paquetes.js";
 import { Usuarios } from "./usuarios/usuarios.js";
-import { Ventas } from "./ventas/ventas.js";
 import { Registro } from "./publico/registro.js";
 import { Destinos } from "./destinos/destinos.js";
 import { Reservas } from "./reservas/reservas.js";
@@ -19,14 +17,8 @@ export function Router() {
 
     if (hash === '#/usuarios') {
         Usuarios();
-    } else if (hash === '#/categorias') {
-        Categorias();
-        // } else if(hash === '#/productos'){
-        //     Productos();
     } else if (hash === '#/destinos') {
         Destinos();
-        // } else if(hash === '#/ventas'){
-        //     Ventas();
     } else if (hash === '#/reservas') {
         Reservas();
     } else if (hash === '#/register') {
@@ -36,8 +28,6 @@ export function Router() {
         Home();
     } else if (hash === '#/paquetes') {
         Paquetes();
-    } else if (hash === '#/ventas') {
-        Ventas();
     }
     console.log('Current hash:', hash);
 }

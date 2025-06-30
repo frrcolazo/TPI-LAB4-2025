@@ -1,5 +1,4 @@
 import { usuariosServices } from "../../servicios/usuarios-servicios.js";
-import { ventasServices } from "../../servicios/ventas-servicios.js";
 import { paquetesServices } from "../../servicios/paquetes-servicios.js";
 import { destinosServices } from "../../servicios/destinos-servicios.js";
 import { reservasServices } from "../../servicios/reservas-servicios.js";
@@ -24,9 +23,9 @@ const htmlHome =
         <!-- small box -->
         <div class="small-box bg-success">
             <div class="inner">
-            <h3 id="indSindespachar">53</h3>
+            <h3 id="indReservas">53</h3>
 
-            <p>Sin despachar</p>
+            <p>Cantidad Reservas Activas</p>
             </div>
             <div class="icon">
             <i class="ion ion-stats-bars"></i>
@@ -99,8 +98,8 @@ export async function Home() {
         indDestinos.innerHTML = resDestinos.total_destinos ?? 0;
 
         // Cantidad de ventas sin despachar
-        const resReservas = await ventasServices.listarVentasDespachadas(false);
-        indReservas.innerHTML = resReservas.length ?? 0;
+        const resReservas = await reservasServices.obtenerTotalReservasActivas();
+        indReservas.innerHTML = resReservas.total_reservas_activas ?? 0;
 
         const paqueteMasReservado = await paquetesServices.obtenerPaqueteMasReservado();
         indPaquetes.innerHTML = paqueteMasReservado?.nombre ?? "Sin datos";

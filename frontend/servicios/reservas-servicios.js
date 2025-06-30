@@ -63,11 +63,26 @@ async function listarPorUsuario(idUsuario) {
     headers: getAuthHeaders()
   }).then(respuesta => respuesta.json());
 }
+async function obtenerTotalReservasActivas() {
+  const urlTotalActivas = url + "/activas/total";
+  return await fetch(urlTotalActivas, {
+    method: 'GET',
+    headers: getAuthHeaders()
+  })
+  .then(async respuesta => {
+    if (!respuesta.ok) {
+      const errText = await respuesta.text();
+      throw new Error(`Error HTTP ${respuesta.status}: ${errText}`);
+    }
+    return respuesta.json();
+  });
+}
 
 export const reservasServices = {
   listar,
   crear,
   editar,
   borrar,
-  listarPorUsuario
+  listarPorUsuario,
+  obtenerTotalReservasActivas
 };

@@ -1,9 +1,9 @@
 from sqlalchemy import create_engine
 import os
 from sqlalchemy.orm import sessionmaker, declarative_base
-from dotenv import load_dotenv
 
-load_dotenv()
+
+
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 DATABASE_URL = "mysql+mysqlconnector://root:Ponquita123.@localhost:3306/proyecto_final"

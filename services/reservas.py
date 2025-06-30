@@ -11,7 +11,8 @@ class ReservasService():
     def get_reservass(self) -> list[ReservasModel]:
         result = self.db.query(ReservasModel).all()
         return result
-
+    def get_total_reservas_activas(self) -> int:
+        return self.db.query(ReservasModel).filter(ReservasModel.estado == True).count()
     def get_reservas(self, id):
         result = self.db.query(ReservasModel).filter(ReservasModel.id == id).first()
         return result
