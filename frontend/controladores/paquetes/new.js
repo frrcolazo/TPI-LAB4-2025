@@ -1,4 +1,4 @@
-import { destionosServices } from "../../servicios/destionos-servicios.js";
+import { destinosServices } from "../../servicios/destinos-servicios.js";
 import { paquetesServices } from "../../servicios/paquetes-servicios.js";
 
 var formulario = '';
@@ -63,7 +63,7 @@ async function crearFormulario() {
     selCategoria = d.getElementById('paqueteCategoria');
 
     /*Cargar categorías en select*/
-    let res = await destionosServices.listar();
+    let res = await destinosServices.listar();
     res.forEach(element => {
         let opcion = d.createElement('option');
         opcion.value = element.id;
