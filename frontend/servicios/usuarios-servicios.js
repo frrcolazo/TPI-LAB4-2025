@@ -14,6 +14,25 @@ async function login(usuario, password) {
     .then(respuesta => respuesta.json())
     .catch(respuesta => respuesta.json());
 }
+async function listarTopReserva() {
+    const urlTopReserva = url + "/top-reserva";
+    return await fetch(urlTopReserva, {
+        method: 'GET',
+        headers: {
+            "accept": "application/json",
+            "Authorization": "Bearer " + localStorage.getItem('token')
+        }
+    }).then(res => {
+        if (!res.ok) return null;
+        return res.json();
+    });
+}
+async function topReservas() {
+    const res = await fetch('/api/usuarios/top-reserva');
+    if (!res.ok) throw new Error('Error al obtener usuario con más reservas');
+    return res.json();
+}
+
 
 async function listar(id) {
     let cadUrl;
@@ -73,6 +92,8 @@ async function borrar(id) {
 export const usuariosServices = {
     login,
     listar,
+    listarTopReserva,
+    topReservas,
     crear,
     editar,
     borrar

@@ -17,7 +17,7 @@ async function listar(id) {
         .then(respuesta => respuesta.json());
 }
 
-async function crear(nombre, fecha_inicio, fecha_fin, cupo, precio, destino_id, destino) {
+async function crear(nombre, fecha_inicio, fecha_fin, cupo, precio, destino_id) {
 
     return await fetch(url, {
         method: 'POST',
@@ -31,13 +31,12 @@ async function crear(nombre, fecha_inicio, fecha_fin, cupo, precio, destino_id, 
             cupo: cupo,
             fecha_inicio: fecha_inicio,
             fecha_fin,
-            destino: destino
         })
     })
         .then(respuesta => respuesta.json());
 }
 
-async function editar(id, nombre, fecha_inicio, fecha_fin, cupo, precio, destino_id, destino) {
+async function editar(id, nombre, fecha_inicio, fecha_fin, cupo, precio, destino_id) {
 
     let urlPut = url + "/" + id;
     return await fetch(urlPut, {
@@ -51,8 +50,7 @@ async function editar(id, nombre, fecha_inicio, fecha_fin, cupo, precio, destino
             precio: precio,
             cupo: cupo,
             fecha_inicio: fecha_inicio,
-            fecha_fin,
-            destino: destino
+            fecha_fin
         })
     })
         .then(respuesta => respuesta.json());
@@ -67,9 +65,9 @@ async function borrar(id) {
         .then(respuesta => respuesta.json());
 }
 
-async function listarPorDestino(destino_id) {
+async function listarPorDestino(nombre_destino) {
     const newUrl = new URL(url + '/');
-    newUrl.searchParams.append('destino_id', destino_id);
+    newUrl.searchParams.append('nombre_destino', nombre_destino);
     return await fetch(newUrl)
         .then(respuesta => respuesta.json());
 

@@ -44,30 +44,23 @@
 
                 <div class="form-group mt-2">
 
-                    <label>Foto</label>
+                    <label>Fecha Inicio</label>
 
-                    <label for="customFile" class="d-flex justify-content-center">
+                    <input type="date" class="form-control" name="fecha inicio" id="paqueteFechaInicio" required>
 
-                        <figure class="text-center py-3">
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
 
-                            <img src="../../img/usuarios/default/anonymous.png" class="img-fluid  changePicture"
-                                style="width:150px">
+                </div>
 
-                        </figure>
+                <div class="form-group mt-2">
 
-                    </label>
+                    <label>Fecha Fin</label>
 
-                    <div class="custom-file">
+                    <input type="date" class="form-control" name="fecha fin" id="paqueteFechaFin" required>
 
-                        <input type="file" id="customFile" class="custom-file-input" accept="image/*"
-                            onchange="validateImageJS(event,'changePicture')" name="picture">
-
-                        <div class="valid-feedback">Valid.</div>
-                        <div class="invalid-feedback">Please fill out this field.</div>
-
-                        <label for="customFile" class="custom-file-label">Elegir imágen</label>
-
-                    </div>
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
 
                 </div>
 
@@ -92,11 +85,11 @@
 
                 <div class="form-group mt-2">
 
-                    <label>Categoria</label>
+                    <label>Destino</label>
 
 
-                    <select class="form-control select2" name="categoria" id="paqueteCategoria" required>
-                        <option value="">Seleccionar Categoría</option>
+                    <select class="form-control select2" name="categoria" id="paqueteDestino" required>
+                        <option value="">Seleccionar Destino</option>
 
                     </select>
 
