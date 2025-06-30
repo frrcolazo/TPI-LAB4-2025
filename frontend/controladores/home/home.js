@@ -1,15 +1,16 @@
 import { usuariosServices } from "../../servicios/usuarios-servicios.js";
 import { ventasServices } from "../../servicios/ventas-servicios.js";
 import { paquetesServices } from "../../servicios/paquetes-servicios.js";
+import { destinosServices } from "../../servicios/destinos-servicios.js";
 const htmlHome =
     ` <div class="row" >
     <div class="col-lg-3 col-6">
         <!-- small box -->
         <div class="small-box bg-info">
             <div class="inner">
-            <h3 id="indVentas">150</h3>
+            <h3 id="indDestinos">150</h3>
 
-            <p>Ventas</p>
+            <p>Cantidad de destinos disponibles</p>
             </div>
             <div class="icon">
                 <i class="ion ion-bag"></i>
@@ -78,7 +79,7 @@ export async function Home() {
     const cP = d.getElementById('contenidoPrincipal');
     cP.innerHTML = htmlHome;
 
-    const indVentas = d.getElementById("indVentas");
+    const indDestinos = d.getElementById("indDestinos");
     const indSinDespachar = d.getElementById("indSindespachar");
     const cantReservasUsuario = d.getElementById("cantReservasUsuario");
     const nombreUsuarioTop = d.getElementById("nombreUsuarioTop");
@@ -93,8 +94,8 @@ export async function Home() {
         nombreUsuarioTop.innerHTML = resUsuario?.nombre ?? "No hay datos";
 
         // Cantidad de ventas
-        const resVentas = await ventasServices.listar();
-        indVentas.innerHTML = resVentas.length ?? 0;
+        const resDestinos = await destinosServices.obtenerTotalDestinos();
+        indDestinos.innerHTML = resDestinos.total_destinos ?? 0;
 
         // Cantidad de ventas sin despachar
         const resSinDespachar = await ventasServices.listarVentasDespachadas(false);
@@ -109,7 +110,7 @@ export async function Home() {
 
         cantReservasUsuario.innerHTML = 0;
         nombreUsuarioTop.innerHTML = "Error";
-        indVentas.innerHTML = 0;
+        indDestinos.innerHTML = 0;
         indSinDespachar.innerHTML = 0;
         indPaquetes.innerHTML = 0;
     } finally {
