@@ -1,5 +1,6 @@
 import { paquetesServices } from "../../../servicios/paquetes-servicios.js";
 import { mostrarSolo } from "../../utils/utils.js";
+import { destinosServices } from "../../../servicios/destinos-servicios.js";
 
 export async function vistaPaquetes(idDestino) {
     console.log("🚀 Cargando paquetes para destino ID:", idDestino);
@@ -28,14 +29,28 @@ export async function vistaPaquetes(idDestino) {
     }
 
     try {
-        const paquetesTodos = await paquetesServices.listar();
-        console.log("Paquetes totales recibidos:", paquetesTodos);
-        
-        const paquetes = paquetesTodos.filter(
-            paquete => Number(paquete.destino_id) === Number(idDestino)
-        );
-        console.log(`Paquetes filtrados para destino_id ${idDestino}:`, paquetes);
+        const [paquetesTodos, destinos] = await Promise.all([
+            paquetesServices.listar(),
+            destinosServices.listar()
+        ]);
 
+        console.log("Paquetes totales recibidos:", paquetesTodos);
+        console.log("Destinos recibidos:", destinos);
+
+        const paquetes = paquetesTodos
+            .filter(paquete => Number(paquete.destino_id) === Number(idDestino))
+            .map(paquete => {
+                const destino = destinos.find(d => d.id === paquete.destino_id);
+                return {
+                    ...paquete,
+                    destino
+                };
+            });
+
+        console.log(`Paquetes filtrados y enriquecidos para destino_id ${idDestino}:`, paquetes);
+        
+
+        
         if (!paquetes || paquetes.length === 0) {
             vista.innerHTML = `
                 <div class="no-paquetes-container">
