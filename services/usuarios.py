@@ -52,9 +52,10 @@ class UsuariosService():
             self.db.query(
                 UsuariosModel.id,
                 UsuariosModel.nombre,
+                UsuariosModel.apellido,
                 func.count(ReservasModel.id).label("cantidad_reservas")
             )
-            .join(ReservasModel, UsuariosModel.id == ReservasModel.usuario_id)
+            .join(ReservasModel, UsuariosModel.id == ReservasModel.idUsuario)
             .group_by(UsuariosModel.id, UsuariosModel.nombre)
             .order_by(desc("cantidad_reservas"))
             .limit(1)

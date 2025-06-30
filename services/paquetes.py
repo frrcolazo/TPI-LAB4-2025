@@ -1,8 +1,9 @@
-from sqlalchemy import update
+from sqlalchemy import func, select, update
 from sqlalchemy.orm import Session
 from models.paquetes import Paquetes as PaquetesModel
 from models.destinos import Destinos as DestinosModel
-from schemas.paquetes import Paquetes
+from models.reservas import Reservas as ReservasModel
+from schemas.paquetes import Paquetes, PaquetesPOST
 
 
 class PaquetesService:
@@ -18,6 +19,20 @@ class PaquetesService:
         result = self.db.query(PaquetesModel).filter(PaquetesModel.id == id).first()
         return result
 
+    def get_paquete_mas_reservado(self):
+
+        query = (
+            select(ReservasModel.idPaquete, func.count())
+            .group_by(ReservasModel.idPaquete)
+            .order_by(func.count().desc())
+            .limit(1)
+        )
+        result = self.db.execute(query).first()
+        if not result:
+            return
+        id_paquete: int = result[0]
+        return self.get_paquete(id_paquete)
+
     def get_paquetes_by_destino(self, destino):
         result = (
             self.db.query(PaquetesModel)
@@ -26,13 +41,13 @@ class PaquetesService:
         )
         return result
 
-    def create_paquetes(self, Paquete: Paquetes):
-        new_paquete = PaquetesModel(**Paquete.model_dump())
+    def create_paquetes(self, Paquete: PaquetesPOST):
+        new_paquete = PaquetesModel(**Paquete.model_dump(exclude_none=True))
         self.db.add(new_paquete)
         self.db.commit()
         return
 
-    def update_paquetes(self, id: int, data: Paquetes) -> bool:
+    def update_paquetes(self, id: int, data: PaquetesPOST) -> bool:
         query = (
             update(PaquetesModel)
             .where(PaquetesModel.id == id)

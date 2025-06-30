@@ -16,6 +16,11 @@ def get_destinos(db = Depends(get_database_session)) -> List[Destinos]:
     result = DestinosService(db).get_destinos()
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
+@destinos_router.get('/destinos/total', tags=['Dashboard'], response_model=dict, status_code=200)
+def total_destinos(db = Depends(get_database_session)):
+    total = DestinosService(db).get_total_destinos()
+    return {"total_destinos": total}
+
 @destinos_router.get('/destinos/{id}', tags=['Destinos'], response_model=Destinos)
 def get_destino(id: int = Path(ge=1, le=2000), db = Depends(get_database_session)) -> Destinos:
     result = DestinosService(db).get_destino(id)

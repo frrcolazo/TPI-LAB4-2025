@@ -1,6 +1,7 @@
 from config.database import Base
 from sqlalchemy import Column, Float, Integer, Boolean, ForeignKey, Date, String
 from sqlalchemy.orm import relationship
+from models.destinos import Destinos
 
 
 class Paquetes(Base):
@@ -14,4 +15,4 @@ class Paquetes(Base):
     cupo = Column(Integer)
     fecha_inicio = Column(Date)
     fecha_fin = Column(Date)
-    destino = relationship("Destinos", backref="paquetes", lazy="select")
+    destino = relationship(Destinos, backref="paquetes", lazy="joined")

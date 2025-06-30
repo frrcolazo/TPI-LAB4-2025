@@ -19,12 +19,12 @@ export async function Paquetes() {
     //Muestro spinner
     spinner.classList.add("d-flex");
     res = await paquetesServices.listar();
+    cP.innerHTML = await fetch('/controladores/paquetes/tabla.html').then(response => response.text())
     res.forEach(element => {
-        element.destino = element.destino.descripcion;
+        element.destino = element.destino?.nombre || "Sin destino";
         element.action = "<div class='btn-group'><a class='btn btn-warning btn-sm mr-1 rounded-circle btnEditarPaquete'  href='#/editPaquete' data-idPaquete='" + element.id + "'> <i class='fas fa-pencil-alt'></i></a><a class='btn btn-danger btn-sm rounded-circle removeItem btnBorrarPaquete'href='#/delPaquete' data-idPaquete='" + element.id + "'><i class='fas fa-trash'></i></a></div>";
     });
 
-    cP.innerHTML = await fetch('./tabla.html').then(response => response.text())
 
     llenarTabla(res);
 
@@ -38,30 +38,44 @@ export async function Paquetes() {
 
 }
 
-function enlazarEventos(oSettings) {
-    let d = document;
-    let btnEditar = d.querySelectorAll(".btnEditarPaquete");
-    let btnBorrar = d.querySelectorAll(".btnBorrarPaquete");
+async function enlazarEventos() {
+    const tabla = document.getElementById('paquetesTable');
+    await new Promise(r => requestAnimationFrame(r));
 
-    for (let i = 0; i < btnEditar.length; i++) {
-        btnEditar[i].addEventListener("click", editar);
-        btnBorrar[i].addEventListener("click", borrar);
-    }
+    // Eliminar listeners duplicados si hace falta
+    tabla.removeEventListener("click", tabla.__eventHandler);
 
+    const handler = function (e) {
+        const editarBtn = e.target.closest('.btnEditarPaquete');
+        if (editarBtn) {
+            const id = editarBtn.getAttribute('data-idPaquete');
+            editar(id);
+            console.log("id" + id)
+            return;
+        }
+
+        const borrarBtn = e.target.closest('.btnBorrarPaquete');
+        if (borrarBtn) {
+            const id = borrarBtn.getAttribute('data-idPaquete');
+            console.log("id" + id)
+            borrar(id);
+        }
+    };
+
+    tabla.addEventListener("click", handler);
+
+    // Guardamos una referencia para evitar duplicaciones
+    tabla.__eventHandler = handler;
 }
 
 function agregar() {
     newRegister();
-
 }
-function editar() {
-    let id = this.getAttribute('data-idPaquete');
+function editar(id) {
     editRegister(id);
-
 }
 
-async function borrar() {
-    let id = this.getAttribute('data-idPaquete');
+async function borrar(id) {
     let borrar = 0;
     await Swal.fire({
         title: 'Está seguro que desea eliminar el registro?',
@@ -93,7 +107,7 @@ function llenarTabla(res) {
         columns: [
             { data: 'id' },
             { data: 'nombre' },
-            { data: 'id_destino' },
+            { data: 'destino_id' },
             { data: 'precio' },
             { data: 'cupo' },
             { data: 'fecha_inicio' },
@@ -102,8 +116,8 @@ function llenarTabla(res) {
             { data: 'action', "orderable": false }
 
         ],
-        fnDrawCallback: function (oSettings) {
-            enlazarEventos(oSettings);
+        fnDrawCallback: async function (oSettings) {
+            await enlazarEventos(oSettings);
         },
         deferRender: true,
         retrive: true,
