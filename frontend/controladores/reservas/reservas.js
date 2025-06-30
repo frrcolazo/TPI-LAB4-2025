@@ -1,4 +1,6 @@
 import { reservasServices } from "../../servicios/reservas-servicios.js";
+import {editRegister} from "./new.js";
+import {newRegister} from "./new.js";
 
 const htmlReservas = `
 <div class="card">
