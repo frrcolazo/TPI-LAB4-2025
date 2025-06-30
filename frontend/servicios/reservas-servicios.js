@@ -24,17 +24,12 @@ async function listar(id) {
     });
 }
 
-async function crear(idUsuario, idPaquete, cantidad_personas, fecha_reserva, estado) {
+// Cambiado: ahora recibe un objeto reserva
+async function crear(reserva) {
   return await fetch(url, {
     method: 'POST',
     headers: getAuthHeaders(),
-    body: JSON.stringify({
-      idUsuario,
-      idPaquete,
-      cantidad_personas,
-      fecha_reserva,
-      estado
-    })
+    body: JSON.stringify(reserva)
   }).then(respuesta => respuesta.json());
 }
 

@@ -53,9 +53,9 @@ let txtUsuario, txtPaquete, txtCantidad, txtFecha, selEstado;
 let idReserva = null;
 
 export async function newRegister() {
-    let d = document;
+    const d = document;
     d.querySelector('.contenidoTitulo').innerHTML = 'Agregar Reserva';
-    d.querySelector('.contenidoTituloSec').innerHTML = 'Nueva';
+    d.querySelector('.contenidoTituloSec').innerHTML = 'Agregar';
     crearFormulario();
 
     formulario = d.querySelector(".frmAmReserva");
@@ -63,7 +63,7 @@ export async function newRegister() {
 }
 
 export async function editRegister(id) {
-    let d = document;
+    const d = document;
     idReserva = id;
     d.querySelector('.contenidoTitulo').innerHTML = 'Editar Reserva';
     d.querySelector('.contenidoTituloSec').innerHTML = 'Editar';
@@ -108,13 +108,13 @@ function guardar(e) {
         return;
     }
 
-    reservasServices.crear(
-        parseInt(txtUsuario.value),
-        parseInt(txtPaquete.value),
-        parseInt(txtCantidad.value),
-        txtFecha.value,
-        selEstado.value === "true"
-    )
+    reservasServices.crear({
+        idUsuario: parseInt(txtUsuario.value),
+        idPaquete: parseInt(txtPaquete.value),
+        cantidad_personas: parseInt(txtCantidad.value),
+        fecha_reserva: txtFecha.value,
+        estado: selEstado.value === "true"
+    })
     .then(() => {
         formulario.reset();
         window.location.href = "#/reservas";
