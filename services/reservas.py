@@ -104,7 +104,7 @@ class ReservasService():
         return existing_reserva
 
     def get_reservas_by_usuario(self, idUsuario :int) -> list[ReservasModel]:
-        result = self.db.query(ReservasModel).filter(ReservasModel.idUsuario == idUsuario).all()
+        result = self.db.query(ReservasModel).filter(ReservasModel.idUsuario == idUsuario,ReservasModel.estado == True ).all()
         return result
     
 
