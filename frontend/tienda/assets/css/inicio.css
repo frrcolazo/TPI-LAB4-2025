@@ -44,14 +44,45 @@
     background-color: #fffcc0;
 }
 
+/* Footer por defecto (para sección de inicio) */
 footer {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.8rem;
+    text-shadow: 1px 1px 2px black;
+    background: transparent;
+    padding: 15px 0;
     position: absolute;
     bottom: 10px;
     width: 100%;
-    text-align: center;
-    color: white;
-    font-size: 0.9rem;
-    text-shadow: 1px 1px 2px black;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+/* Footer cuando se muestra la sección de destinos */
+.seccionDestinos ~ footer,
+body:has(.seccionDestinos:not([style*="display: none"])) footer {
+    position: static;
+    background-color: rgba(0, 0, 0, 0.8);
+    margin-top: 40px;
+    bottom: auto;
+    padding: 20px 0;
+}
+
+/* Alternativamente, usando JavaScript */
+.footer-destinos {
+    position: static !important;
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    margin-top: 40px !important;
+    bottom: auto !important;
+    padding: 20px 0 !important;
+}
+
+.footer-inicio {
+    position: absolute !important;
+    background: transparent !important;
+    bottom: 10px !important;
+    margin-top: 0 !important;
 }
 
 .titulo {
