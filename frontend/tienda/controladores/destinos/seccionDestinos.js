@@ -1,5 +1,29 @@
 import { mostrarSolo } from "../../utils/utils.js";
 
+// Mapeo manual de nombres de destinos a archivos de imagen
+const mapeoImagenes = {
+    // Destinos de playa
+    "Mar del Plata": "mar_del_plata.jpg",
+    "Punta Cana": "punta_cana.jpg", 
+    "Búzios": "buzios.jpg",
+    "Buzios": "buzios.jpg", // Por si viene sin tilde
+    
+    // Destinos de nieve
+    "Bariloche": "bariloche.jpg",
+    "San Martín de los Andes": "san_martin.jpg",
+    "Ushuaia": "ushuaia.jpg",
+    
+    // Destinos de ciudad
+    "Madrid": "madrid.jpg",
+    "Nueva York": "nueva_york.jpg",
+    "Córdoba": "cordoba.jpg"
+};
+
+function obtenerImagenDestino(nombreDestino) {
+    const imagen = mapeoImagenes[nombreDestino];
+    return imagen ? `./assets/img/${imagen}` : null;
+}
+
 export async function mostrarDestinos() {
     mostrarSolo("seccionDestinos");
     const d = document;
@@ -21,7 +45,6 @@ export async function mostrarDestinos() {
         }
 
         // Dividir destinos en grupos de 3 por orden
-        // Los primeros 3 van a playa, los siguientes 3 a nieve, los últimos 3 a ciudad
         const destinosCategorizados = {
             playa: destinos.slice(0, 3),
             nieve: destinos.slice(3, 6), 
@@ -79,39 +102,27 @@ function crearSeccionDestino(tipo, titulo, destinos) {
         `;
     }
 
-    // Crear items del carrusel
     let itemsCarrusel = '';
-    
-    // Si hay 3 o menos, mostrar todos
-    if (destinos.length <= 3) {
-        destinos.forEach(destino => {
-            itemsCarrusel += `
-                <div class="item-destino">
-                    <h3>${destino.nombre}</h3>
-                    <p>${destino.descripcion}</p>
-                    <p><strong>País:</strong> ${destino.pais}</p>
-                    <button onclick="verPaquetes(${destino.id})">Ver paquetes</button>
-                </div>
-            `;
-        });
+
+    destinos.forEach(destino => {
+        const rutaImagen = obtenerImagenDestino(destino.nombre);
         
-        // Rellenar con items vacíos si hay menos de 3
-        while (itemsCarrusel.split('item-destino').length - 1 < 3) {
-            itemsCarrusel += '<div class="item-destino"></div>';
-        }
-    } else {
-        // Si hay más de 3, mostrar los primeros 3 y preparar para carrusel
-        for (let i = 0; i < 3; i++) {
-            const destino = destinos[i];
-            itemsCarrusel += `
-                <div class="item-destino">
-                    <h3>${destino.nombre}</h3>
-                    <p>${destino.descripcion}</p>
-                    <p><strong>País:</strong> ${destino.pais}</p>
-                    <button onclick="verPaquetes(${destino.id})">Ver paquetes</button>
-                </div>
-            `;
-        }
+        itemsCarrusel += `
+            <div class="item-destino">
+                ${rutaImagen ? 
+                    `<img src="${rutaImagen}" alt="${destino.nombre}" class="img-destino">` : 
+                    `<div class="placeholder-destino">Imagen no disponible</div>`
+                }
+                <h3>${destino.nombre}</h3>
+                <p>${destino.descripcion}</p>
+                <p><strong>País:</strong> ${destino.pais}</p>
+                <button onclick="verPaquetes(${destino.id})">Ver paquetes</button>
+            </div>
+        `;
+    });
+
+    while (itemsCarrusel.split('item-destino').length - 1 < 3) {
+        itemsCarrusel += '<div class="item-destino"></div>';
     }
 
     return `
@@ -130,36 +141,39 @@ function crearSeccionDestino(tipo, titulo, destinos) {
     `;
 }
 
-// Función para manejar el carrusel (si tienes más de 3 destinos)
 window.moverCarrusel = function(tipo, direccion) {
     const seccionDestino = document.querySelector(`.destino-${tipo}`);
     const destinos = JSON.parse(seccionDestino.dataset.destinos);
-    
+
     if (!seccionDestino.dataset.indiceActual) {
         seccionDestino.dataset.indiceActual = '0';
     }
-    
+
     let indiceActual = parseInt(seccionDestino.dataset.indiceActual);
     indiceActual += direccion;
-    
-    // Controlar límites
+
     if (indiceActual < 0) {
         indiceActual = Math.max(0, destinos.length - 3);
     } else if (indiceActual > destinos.length - 3) {
         indiceActual = 0;
     }
-    
+
     seccionDestino.dataset.indiceActual = indiceActual.toString();
-    
-    // Actualizar contenido del carrusel
+
     const carrusel = seccionDestino.querySelector('.carrusel-destino');
     let itemsCarrusel = '';
-    
+
     for (let i = 0; i < 3; i++) {
         const destino = destinos[indiceActual + i];
         if (destino) {
+            const rutaImagen = obtenerImagenDestino(destino.nombre);
+            
             itemsCarrusel += `
                 <div class="item-destino">
+                    ${rutaImagen ? 
+                        `<img src="${rutaImagen}" alt="${destino.nombre}" class="img-destino">` : 
+                        `<div class="placeholder-destino">Imagen no disponible</div>`
+                    }
                     <h3>${destino.nombre}</h3>
                     <p>${destino.descripcion}</p>
                     <p><strong>País:</strong> ${destino.pais}</p>
@@ -170,6 +184,6 @@ window.moverCarrusel = function(tipo, direccion) {
             itemsCarrusel += '<div class="item-destino"></div>';
         }
     }
-    
+
     carrusel.innerHTML = itemsCarrusel;
 };
