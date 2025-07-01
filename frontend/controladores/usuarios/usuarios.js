@@ -1,4 +1,5 @@
 import { usuariosServices } from "../../servicios/usuarios-servicios.js";
+import { reservasServices } from "../../servicios/reservas-servicios.js";
 import { newRegister } from "./new.js";
 import { editRegister } from "./new.js";
 
@@ -45,23 +46,23 @@ export async function Usuarios(){
     let res = await usuariosServices.listar();
 
     res.forEach(element => {
-      element.action = `
-        <div class='btn-group'>
-          <a class='btn btn-warning btn-sm mr-1 rounded-circle btnEditarUsuario' href='#/editUsuario' data-idUsuario='${element.id}'>
-            <i class='fas fa-pencil-alt'></i>
-          </a>
-          <a class='btn btn-danger btn-sm rounded-circle btnBorrarUsuario' href='#/delUsuario' data-idUsuario='${element.id}'>
-            <i class='fas fa-trash'></i>
-          </a>
-        </div>`;
+        element.action = `
+            <div class='btn-group'>
+                <a class='btn btn-warning btn-sm mr-1 rounded-circle btnEditarUsuario' href='#/editUsuario' data-idUsuario='${element.id}'>
+                    <i class='fas fa-pencil-alt'></i>
+                </a>
+                <a class='btn btn-danger btn-sm rounded-circle btnBorrarUsuario' href='#/delUsuario' data-idUsuario='${element.id}'>
+                    <i class='fas fa-trash'></i>
+                </a>
+            </div>`;
     });  
 
-    // 👉 Primero insertás el HTML
     cP.innerHTML = htmlUsuarios;
+
     llenarTabla(res);
 
-    // 👉 Y luego enganchás los botones que ahora sí existen en el DOM
     d.querySelector(".btnAgregarUsuario").addEventListener("click", agregar);
+
     d.querySelector(".btnHistorialViaje").addEventListener("click", async () => {
         const idUsuario = prompt("Ingrese el ID del usuario para ver su historial de viajes:");
         if (!idUsuario) return alert("ID de usuario requerido");
@@ -75,8 +76,22 @@ export async function Usuarios(){
         }
     });
 
+    d.querySelector(".btnReservaActiva").addEventListener("click", async () => {
+        const idUsuario = prompt("Ingrese el ID del usuario para ver su reserva activa:");
+        if (!idUsuario) return alert("ID de usuario requerido");
+
+        try {
+            const reservas = await reservasServices.getReservasActivasPorUsuario(idUsuario);
+            mostrarReservasActivas(reservas);
+        } catch (error) {
+            console.error("Error obteniendo reservas activas:", error);
+            alert("Error al obtener la reserva activa");
+        }
+    });
+
     spinner.classList.replace("d-flex", "d-none");   
 }
+
 
 
 function enlazarEventos(){
@@ -208,7 +223,66 @@ function mostrarHistorial(historial) {
 
     container.innerHTML = tablaHTML;
 
-    // Lo inserto debajo de la tabla de usuarios
+    const cP = d.getElementById('contenidoPrincipal');
+    cP.appendChild(container);
+}
+
+function mostrarReservasActivas(reservas) {
+    let d = document;
+
+    const contAnterior = d.getElementById('reservasActivasContainer');
+    if (contAnterior) contAnterior.remove();
+
+    const container = d.createElement('div');
+    container.id = 'reservasActivasContainer';
+    container.className = 'card mt-3';
+
+    let tablaHTML = `
+        <div class="card-header"><h3 class="card-title">Reserva Activa Por Usuario</h3></div>
+        <div class="card-body table-responsive p-0" style="max-height: 400px;">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Paquete</th>
+                    <th>Destino</th>
+                    <th>Fecha Inicio</th>
+                    <th>Fecha Fin</th>
+                    <th>Fecha Reserva</th>
+                    <th>Personas</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    if (reservas.length === 0) {
+        tablaHTML += `<tr><td colspan="8" class="text-center">No hay reservas activas para este usuario.</td></tr>`;
+    } else {
+        reservas.forEach(item => {
+            tablaHTML += `
+                <tr>
+                    <td>${item.nombre ?? ''}</td>
+                    <td>${item.apellido ?? ''}</td>
+                    <td>${item.paquete_nombre ?? ''}</td>
+                    <td>${item.destino_nombre ?? ''}</td>
+                    <td>${item.fecha_inicio ?? ''}</td>
+                    <td>${item.fecha_fin ?? ''}</td>
+                    <td>${item.fecha_reserva ?? ''}</td>
+                    <td>${item.cantidad_personas ?? ''}</td>
+                </tr>
+            `;
+        });
+    }
+
+    tablaHTML += `
+            </tbody>
+        </table>
+        </div>
+    `;
+
+    container.innerHTML = tablaHTML;
+
     const cP = d.getElementById('contenidoPrincipal');
     cP.appendChild(container);
 }

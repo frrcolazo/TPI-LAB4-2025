@@ -72,12 +72,37 @@ async function obtenerTotalReservasActivas() {
     return respuesta.json();
   });
 }
+async function getReservasActivasPorUsuario(idUsuario) {
+  try {
+      const res = await fetch(`${url}/usuario/${idUsuario}/resumen`, {
+          method: 'GET',
+          headers: {
+              "Authorization": `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json"
+          }
+      });
 
+      if (!res.ok) {
+          if (res.status === 404) {
+              alert("No hay reservas activas para este usuario.");
+              return [];
+          }
+          const error = await res.json();
+          throw new Error(error.detail || "Error al obtener reservas");
+      }
+
+      return await res.json();
+  } catch (err) {
+      console.error("Error en reservasServices.getReservasActivasPorUsuario:", err);
+      throw err;
+  }
+}
 export const reservasServices = {
   listar,
   crear,
   editar,
   borrar,
   listarPorUsuario,
-  obtenerTotalReservasActivas
+  obtenerTotalReservasActivas,
+  getReservasActivasPorUsuario
 };

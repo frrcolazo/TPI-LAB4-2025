@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 from models.reservas import Reservas as ReservasModel
 from models.paquetes import Paquetes as PaquetesModel  
+from models.destinos import Destinos as DestinosModel
+from models.usuarios import Usuarios as UsuariosModel
 from schemas.reservas import Reservas
 from datetime import date  
 
@@ -66,15 +68,12 @@ class ReservasService():
 
         hoy = date.today()
 
-        # Validar que la modificacion de la reserva es para hoy
         if reserva.fecha_reserva != hoy:
             raise ValueError("La fecha de reserva solo puede ser hoy")
 
-        # Validar que la fecha de reserva no es posterior al inicio del paquete
         if reserva.fecha_reserva > paquete.fecha_inicio:
             raise ValueError("La fecha de reserva no puede ser posterior al inicio del paquete")
 
-        # Validar disponibilidad de cupo (excluyendo la reserva que se está actualizando)
         reservas_existentes = self.db.query(ReservasModel).filter(
             ReservasModel.idPaquete == reserva.idPaquete,
             ReservasModel.fecha_reserva == reserva.fecha_reserva,
@@ -111,3 +110,25 @@ class ReservasService():
         result = self.db.query(ReservasModel).filter(ReservasModel.idUsuario == idUsuario, ReservasModel.estado == True).all()
         return result
     #COMPLETAR LO QUE FALTA FELI
+
+    def get_resumen_reservas_usuario(self, idUsuario: int):
+        query = (
+            self.db.query(
+                UsuariosModel.nombre,
+                UsuariosModel.apellido,
+                PaquetesModel.nombre.label("paquete_nombre"),
+                DestinosModel.nombre.label("destino_nombre"),
+                PaquetesModel.fecha_inicio,
+                PaquetesModel.fecha_fin,
+                ReservasModel.fecha_reserva,
+                ReservasModel.cantidad_personas
+            )
+            .join(ReservasModel, UsuariosModel.id == ReservasModel.idUsuario)
+            .join(PaquetesModel, ReservasModel.idPaquete == PaquetesModel.id)
+            .join(DestinosModel, PaquetesModel.destino_id == DestinosModel.id)
+            .filter(ReservasModel.idUsuario == idUsuario, ReservasModel.estado == True)
+        )
+
+        resultados = query.all()
+        
+        return [dict(r._mapping) for r in resultados]

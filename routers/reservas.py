@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from fastapi import Depends, Path, Query, HTTPException,UploadFile, File
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from typing import List
 from config.database import get_database_session
@@ -70,7 +71,7 @@ def delete_reservas(id: int, db=Depends(get_database_session)) -> Reservas:
 
 
 # --- Obtener reservas por usuario ---
-@reservas_router.get('/reservas/usuario/{idUsuario}', tags=['Reservas'], response_model=List[Reservas], status_code=200, dependencies=[Depends(JWTBearer())])
+@reservas_router.get('/reservas/usuario/{idUsuario}', tags=['Reservas'], response_model=List[Reservas], status_code=200)
 def get_reservas_by_usuario(idUsuario: int = Path(ge=1, le=2000), db=Depends(get_database_session)) -> List[Reservas]:
     result = ReservasService(db).get_reservas_by_usuario(idUsuario)
     if not result:
@@ -88,3 +89,14 @@ def get_reservas_by_usuario_activo(usuario: Usuarios = Depends(get_user_actual),
     reservas_schemas = [Reservas.model_validate(reserva, from_attributes=True) for reserva in result]
 
     return reservas_schemas
+
+@reservas_router.get('/reservas/usuario/{idUsuario}/resumen', tags=['Reservas'], status_code=200)
+def get_resumen_reservas_usuario(
+    idUsuario: int = Path(ge=1, le=2000),
+    db=Depends(get_database_session)
+):
+    result = ReservasService(db).get_resumen_reservas_usuario(idUsuario)
+    if not result:
+        raise HTTPException(status_code=404, detail="No hay reservas activas para este usuario")
+    
+    return JSONResponse(content=jsonable_encoder(result))
