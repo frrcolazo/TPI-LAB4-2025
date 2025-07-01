@@ -3,7 +3,7 @@ from models.reservas import Reservas as ReservasModel
 from models.paquetes import Paquetes as PaquetesModel  
 from models.destinos import Destinos as DestinosModel
 from models.usuarios import Usuarios as UsuariosModel
-from schemas.reservas import Reservas
+from schemas.reservas import Reservas, ReservasUpdate
 from datetime import date  
 
 class ReservasService():
@@ -57,7 +57,7 @@ class ReservasService():
 
     from datetime import date
 
-    def update_reservas(self, id, reserva: Reservas):
+    def update_reservas(self, id, reserva: ReservasUpdate):
         existing_reserva = self.db.query(ReservasModel).filter(ReservasModel.id == id).first()
         if not existing_reserva:
             return None
@@ -86,8 +86,8 @@ class ReservasService():
         if reserva.cantidad_personas > cupo_disponible:
             raise ValueError(f"No hay cupo suficiente. Cupo disponible: {cupo_disponible}")
 
-        # Actualizar campos
-        for key, value in reserva.model_dump().items():
+        # Actualizar solo los campos que no son None
+        for key, value in reserva.model_dump(exclude_unset=True).items():
             setattr(existing_reserva, key, value)
 
         self.db.commit()
