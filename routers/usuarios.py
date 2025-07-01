@@ -1,6 +1,7 @@
 from fastapi import APIRouter, File
 from fastapi import Depends, Path, Query,  HTTPException, status,UploadFile
 from fastapi.responses import JSONResponse,FileResponse
+from fastapi.security import HTTPBearer
 from pydantic import BaseModel, Field
 from typing import Optional, List
 
@@ -12,14 +13,14 @@ from middlewares.jwt_bearer import JWTBearer
 from services.usuarios import UsuariosService
 from schemas.usuarios import Usuarios
 from passlib.context import CryptContext
-from utils.jwt_manager import create_token
+from utils.jwt_manager import create_token, validate_token
 from schemas.usuarios import User, UsuarioBase
 from services.reservas import ReservasService
 from schemas.reservas import Reservas
+from jwt import PyJWKError
 import os
 import shutil
 usuarios_router = APIRouter()
-
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def authenticate_user(users:dict, email: str, password: str)->UsuarioBase:
@@ -38,6 +39,24 @@ def get_user(users:list, email: str):
     for item in users:
         if item.correo == email:
             return item
+
+
+def get_user_actual(token = Depends(JWTBearer()), db = Depends(get_database_session)):
+    try:
+        res: dict[str, str] = validate_token(token)
+        
+    except PyJWKError:
+        raise HTTPException(401, "Token no valido")
+    email_usuario: str = res["email"]
+    usuario_model = UsuariosService(db).get_usuarios_by_mail_first(email_usuario)
+    if not usuario_model:
+        raise HTTPException(404, "No lo encontramos")
+    return Usuarios.model_validate(usuario_model)
+
+def get_admin_user_actual(usuario: Usuarios = Depends(get_user_actual)):
+    if usuario.role != "admin":
+        raise HTTPException(status_code=403, detail="Acceso denegado")
+    return usuario
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)    
