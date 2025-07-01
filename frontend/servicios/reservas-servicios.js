@@ -30,7 +30,12 @@ async function crear(reserva) {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(reserva)
-    }).then(respuesta => respuesta.json());
+    }).then(respuesta => {
+        if (!respuesta.ok) {
+            alert("No fue posible crear la reserva");
+        }
+        return respuesta.json();
+    });
 }
 
 // Para editar tienes que enviar el objeto completo; aquí solo ejemplo con estado
@@ -40,7 +45,12 @@ async function editar(id, reservaCompleta) {
         method: 'PUT',
         headers: getAuthHeaders(),
         body: JSON.stringify(reservaCompleta)
-    }).then(respuesta => respuesta.json());
+    }).then(respuesta => {
+        if (!respuesta.ok) {
+            alert("No fue posible editar la reserva");
+        }
+        return respuesta.json();
+    });
 }
 
 async function borrar(id) {
@@ -48,7 +58,12 @@ async function borrar(id) {
     return await fetch(urlDelete, {
         method: 'DELETE',
         headers: getAuthHeaders()
-    }).then(respuesta => respuesta.json());
+    }).then(respuesta => {
+        if (!respuesta.ok) {
+            alert("No fue posible eliminar la reserva");
+        }
+        return respuesta.json();
+    });
 }
 
 async function listarPorUsuario(idUsuario) {
