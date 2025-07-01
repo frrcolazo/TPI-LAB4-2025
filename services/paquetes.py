@@ -19,6 +19,7 @@ class PaquetesService:
         result = self.db.query(PaquetesModel).filter(PaquetesModel.id == id).first()
         return result
 
+<<<<<<< HEAD
     def get_paquete_mas_reservado(self):
 
         query = (
@@ -34,6 +35,9 @@ class PaquetesService:
         return self.get_paquete(id_paquete)
 
     def get_paquetes_by_destino(self, destino):
+=======
+    def get_paquetes_by_destino(self, destino: str):
+>>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf
         result = (
             self.db.query(PaquetesModel)
             .filter(PaquetesModel.destino.nombre == destino)
@@ -47,7 +51,11 @@ class PaquetesService:
         self.db.commit()
         return
 
+<<<<<<< HEAD
     def update_paquetes(self, id: int, data: PaquetesPOST) -> bool:
+=======
+    def update_paquetes(self, id: int, data: Paquetes) -> bool:
+>>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf
         query = (
             update(PaquetesModel)
             .where(PaquetesModel.id == id)
@@ -60,4 +68,8 @@ class PaquetesService:
     def delete_paquetes(self, id: int) -> bool:
         deleted = self.db.query(PaquetesModel).filter(PaquetesModel.id == id).delete()
         self.db.commit()
+<<<<<<< HEAD
         return deleted > 0
+=======
+        return deleted > 0
+>>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf

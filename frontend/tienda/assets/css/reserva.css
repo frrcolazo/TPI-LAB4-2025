@@ -48,6 +48,7 @@
 
 .item-reserva {
     width: 320px;
+<<<<<<< HEAD
     min-height: 360px;
     background: #a3a395;
     border-radius: 12px;
@@ -110,4 +111,16 @@
     backdrop-filter: blur(2px);
     font-family: 'Georgia', serif;
     text-shadow: 1px 1px 4px #222;
+=======
+    height: 320px;
+    background: #a3a395;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.4rem;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+>>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf
 }

@@ -15,6 +15,7 @@ async function listar(id) {
     })
     .then(respuesta => respuesta.json());
 }
+<<<<<<< HEAD
 async function obtenerTotalDestinos() {
     const urlTotal = url + "/total";
     return await fetch(urlTotal, {
@@ -24,6 +25,8 @@ async function obtenerTotalDestinos() {
     })
     .then(respuesta => respuesta.json());
 }
+=======
+>>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf
 
 async function crear({ nombre, descripcion, pais }) {
     return await fetch(url, {
@@ -68,6 +71,10 @@ export const destinosServices = {
     listar,
     crear,
     editar,
+<<<<<<< HEAD
     borrar,
     obtenerTotalDestinos
+=======
+    borrar
+>>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf
 }

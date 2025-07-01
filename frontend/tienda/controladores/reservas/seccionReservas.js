@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 import { mostrarSolo } from "../../utils/utils.js";
 import { reservasServices } from "../../../servicios/reservas-servicios.js"
 // Por ejemplo, en el controlador de login:
 mostrarSolo("seccionReservas");
 // Ahora cargas el contenido de login en esa sección
 export async function mostrarReservas() {
+=======
+export function mostrarReservas() {
+>>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf
     const d = document;
     // Limpiar/ocultar otras secciones
     let seccionInicio = d.querySelector(".seccionInicio");
@@ -27,6 +31,7 @@ export async function mostrarReservas() {
     seccionReservas.innerHTML = `
         <h1 class="titulo-reservas">MIS RESERVAS ACTIVAS</h1>
         <div class="carrusel-reservas">
+<<<<<<< HEAD
         </div>
     `;
     await cargarReservasEnCarrusel()
@@ -56,4 +61,10 @@ async function cargarReservasEnCarrusel() {
         carruselReservas.appendChild(elementoReserva)
     });
 
+=======
+            <div class="item-reserva"></div>
+            <div class="item-reserva"></div>
+        </div>
+    `;
+>>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf
 }

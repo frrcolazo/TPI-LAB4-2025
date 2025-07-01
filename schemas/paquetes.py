@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 from pydantic import (
     BaseModel,
     Field,
     PositiveInt,
     PositiveFloat,
 )
+=======
+from pydantic import BaseModel, Field, EmailStr, PositiveInt, PositiveFloat
+>>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf
 from typing import Optional, List
 from datetime import date
 
@@ -15,6 +19,7 @@ class Paquetes(BaseModel):
     destino_id: PositiveInt
     nombre: str = Field(min_length=1)
     precio: PositiveFloat
+<<<<<<< HEAD
     cupo: Optional[PositiveFloat] = None
     fecha_inicio: Optional[date] = None
     fecha_fin: Optional[date] = None
@@ -46,3 +51,11 @@ class PaquetesPOST(BaseModel):
                 }
             ]
         }
+=======
+    cupo: Optional[PositiveFloat]
+    fecha_inicio: Optional[date]
+    fecha_fin: Optional[date]
+
+    class Config:
+        from_attributes = True
+>>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf
