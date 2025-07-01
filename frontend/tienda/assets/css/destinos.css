@@ -1,0 +1,466 @@
+/* Contenedor principal de destinos */
+.seccionDestinos {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Header principal de destinos */
+.destinos-header {
+    text-align: center;
+    padding: 4rem 2rem 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.destinos-titulo-principal {
+    font-size: 3.5rem;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(45deg, #ffffff, #f0f8ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.destinos-descripcion {
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+    font-weight: 300;
+}
+
+/* Estados especiales */
+.destinos-loading,
+.destinos-error,
+.destinos-vacio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    text-align: center;
+    color: white;
+    padding: 2rem;
+}
+
+.loading-spinner-destinos {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #ffffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 2rem;
+}
+
+.vacio-icono,
+.error-icono {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.btn-reintentar-destinos {
+    margin-top: 1rem;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid white;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-reintentar-destinos:hover {
+    background: white;
+    color: #667eea;
+}
+
+/* Sección individual de destino */
+.destino {
+    min-height: 100vh;
+    padding: 4rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s ease;
+}
+
+.destino.destino-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.destino-playa {
+    background-image: url("../img/imagen01.webp");
+}
+
+.destino-nieve {
+    background-image: url("../img/imagen02.jpg");
+}
+
+.destino-ciudad {
+    background-image: url("../img/imagen03.jpg");
+}
+
+/* Overlay con gradiente */
+.destino-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+/* Contenido del destino */
+.destino-contenido {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1400px;
+    padding: 0 2rem;
+}
+
+/* Header de cada sección */
+.destino-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.destino-icono {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+.destino-titulo {
+    font-family: 'Work Sans', cursive, sans-serif;
+    font-size: 3.5rem;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    text-align: center;
+    letter-spacing: 3px;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    font-weight: 700;
+}
+
+.destino-subtitulo {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+    font-weight: 300;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Container del carrusel */
+.carrusel-container {
+    position: relative;
+}
+
+/* Carrusel de destinos */
+.carrusel-destino {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+    transition: all 0.3s ease;
+}
+
+/* Items del destino */
+.item-destino {
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideUp 0.6s ease forwards;
+}
+
+.item-destino:nth-child(1) { animation-delay: 0.1s; }
+.item-destino:nth-child(2) { animation-delay: 0.2s; }
+.item-destino:nth-child(3) { animation-delay: 0.3s; }
+
+.item-destino-placeholder {
+    visibility: hidden;
+}
+
+/* Card del destino */
+.destino-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s ease;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.destino-card:hover {
+    transform: translateY(-15px) scale(1.02);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+}
+
+/* Container de imagen */
+.destino-imagen-container {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+}
+
+.img-destino {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.destino-card:hover .img-destino {
+    transform: scale(1.1);
+}
+
+.placeholder-destino {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #bdc3c7, #95a5a6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+}
+
+.placeholder-icono {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.7;
+}
+
+/* Badge del destino */
+.destino-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.destino-card:hover .destino-badge {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Información del destino */
+.destino-info {
+    padding: 2rem;
+}
+
+.destino-nombre {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 1rem 0;
+    line-height: 1.2;
+}
+
+.destino-descripcion {
+    color: #7f8c8d;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* País */
+.destino-pais {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 0.8rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.destino-pais:hover {
+    background: #e9ecef;
+}
+
+.pais-icono {
+    font-size: 1.2rem;
+    margin-right: 0.8rem;
+}
+
+.pais-texto {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1rem;
+}
+
+/* Botón ver paquetes */
+.btn-ver-paquetes {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(45deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-ver-paquetes:hover {
+    background: linear-gradient(45deg, #2980b9, #3498db);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+}
+
+.btn-icono {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.btn-ver-paquetes:hover .btn-icono {
+    transform: translateX(5px);
+}
+
+/* Controles del carrusel */
+.controles-carrusel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.btn-carrusel {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    color: white;
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+}
+
+.btn-carrusel:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.carrusel-icono {
+    display: block;
+    line-height: 1;
+}
+
+/* Indicadores del carrusel */
+.indicadores-carrusel {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.indicador {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicador.activo {
+    background: white;
+    border-color: white;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+.indicador:hover {
+    border-color: white;
+    transform: scale(1.2);
+}
+
+/* Estados vacíos */
+.item-destino-vacio {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 320px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.vacio-contenido {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.vacio-icono-pequeño {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+/* Animaciones */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes slideUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+

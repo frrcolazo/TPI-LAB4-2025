@@ -1,0 +1,155 @@
+.seccionInicio {
+    background-image: url("../../assets/img/imagen-inicio.jpg"); /* asegurate del path */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    position: relative;
+    color: #f0f8a1; /* color suave como el de ejemplo */
+    text-align: center;
+    font-family: 'Georgia', serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.seccionInicio h1 {
+    font-size: 4rem;
+    margin-bottom: 2rem;
+    letter-spacing: 2px;
+    font-weight: bold;
+    color: #f0f8a1;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.accesos-rapidos {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btnAcceso {
+    background-color: #f0f8a1;
+    color: black;
+    padding: 1rem 2rem;
+    border-radius: 2rem;
+    font-weight: bold;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.btnAcceso:hover {
+    background-color: #fffcc0;
+}
+
+/* Footer por defecto (para sección de inicio) */
+footer {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.8rem;
+    text-shadow: 1px 1px 2px black;
+    background: transparent;
+    padding: 15px 0;
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+/* Footer cuando se muestra la sección de destinos */
+.seccionDestinos ~ footer,
+body:has(.seccionDestinos:not([style*="display: none"])) footer {
+    position: static;
+    background-color: rgba(0, 0, 0, 0.8);
+    margin-top: 40px;
+    bottom: auto;
+    padding: 20px 0;
+}
+
+/* Alternativamente, usando JavaScript */
+.footer-destinos {
+    position: static !important;
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    margin-top: 40px !important;
+    bottom: auto !important;
+    padding: 20px 0 !important;
+}
+
+.footer-inicio {
+    position: absolute !important;
+    background: transparent !important;
+    bottom: 10px !important;
+    margin-top: 0 !important;
+}
+
+.titulo {
+    margin-bottom: 2rem;
+}
+
+.btnAcceso.principal {
+    margin-bottom: 2rem;
+}
+
+header {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1rem;
+    z-index: 10;
+}
+
+.login {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.login a {
+    color: #f0f8a1;
+    font-weight: bold;
+    text-decoration: none;
+    margin-left: 0.5rem;
+}
+
+.login a:hover {
+    text-decoration: underline;
+}
+
+.login i {
+    color: #f0f8a1;
+}
+
+.login {
+    background-color: rgba(0, 0, 0, 0.4); /* fondo negro con transparencia */
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+}
+
+.login a, .login i {
+    color: #fffacd; /* un amarillo clarito */
+}
+
+.btnAcceso:hover {
+    background-color: #fffcc0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.seccionInicio::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.4); /* ajustá opacidad según la imagen */
+    z-index: 0;
+}
+.seccionInicio > * {
+    position: relative;
+    z-index: 1;
+}
+
+.btnAcceso {
+    cursor: pointer;
+}

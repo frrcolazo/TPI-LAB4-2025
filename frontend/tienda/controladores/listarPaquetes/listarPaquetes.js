@@ -82,14 +82,14 @@ export async function listarProductos(){
     let d = document;
     let resCat;
     
-    let listaProductos = d.querySelector(".seccionProductos");
+    let listaPaquetes = d.querySelector(".seccionPaquetes");
     
-    listaProductos.innerHTML="";
+    listaPaquetes.innerHTML="";
     resCat = await categoriasServices.listar();
     
     resCat.forEach(element => {
                     
-        listaProductos.innerHTML += htmlCategoria(element.id, element.descripcion);
+        listaPaquetes.innerHTML += htmlCategoria(element.id, element.descripcion);
               
         asignarProducto( element.id);
                  
