@@ -19,7 +19,7 @@ export function RouterVuelo() {
   if (hash.startsWith("#paquete/")) {
     const nombrePaquete = decodeURIComponent(hash.split("/")[1]);
     vistaPaquete(nombrePaquete);
-  
+
   } else if (hash === "#login") {
     login();
 
@@ -31,38 +31,29 @@ export function RouterVuelo() {
     location.replace("vuelo.html"); // adaptalo al nombre de tu archivo
 
   } else if (hash === "#reservas") {
-    // Acá cargás la vista de reservas activas
     import("./reservas/seccionReservas.js").then(mod => mod.mostrarReservas());
 
-
-
   } else if (hash === "#destinos") {
-    // Acá cargás los destinos
     import("./destinos/seccionDestinos.js").then(mod => mod.mostrarDestinos());
 
-
   } else if (hash === "#historial") {
-    // Acá cargás el historial
     import("./historial/seccionHistorial.js").then(mod => mod.mostrarHistorial());
 
-} else if (hash.startsWith("#paquetes/")) {
+  } else if (hash.startsWith("#paquetes/")) {
     const idDestino = hash.split("/")[1];
-    import("./destinos/vistaPaquetes.js")
-        .then(mod => mod.vistaPaquetes(idDestino));
+    import("./destinos/vistaPaquetes.js").then(mod => mod.vistaPaquetes(idDestino));
 
-    
+  } else if (hash.startsWith("#reserva/")) {
+    const idPaquete = hash.split("/")[1];
+    import("./destinos/vistaReserva.js").then(mod => mod.vistaReserva(idPaquete));
 
+  
   } else {
-    // Pantalla de inicio: botones + carruseles
     cargarSeccionInicio();
     mostrarUsuario();
-    // CarruselPorDestino();
-    // listarPaquetes(); // O podés combinar esto en una sola función si querés
   }
-
-  console.log("Ruta:", hash);
-  mostrarUsuario();
 }
+
 
 function setSession(session) {
   let d = document;

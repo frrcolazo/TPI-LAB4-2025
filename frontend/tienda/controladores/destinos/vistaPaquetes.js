@@ -49,8 +49,6 @@ export async function vistaPaquetes(idDestino) {
 
         console.log(`Paquetes filtrados y enriquecidos para destino_id ${idDestino}:`, paquetes);
         
-
-        
         if (!paquetes || paquetes.length === 0) {
             vista.innerHTML = `
                 <div class="no-paquetes-container">
@@ -213,6 +211,14 @@ function obtenerImagenDestino(destino_id) {
     return imagenes[destino_id] || "assets/img/default.jpg";
 }
 
+export function reservarPaquete(idPaquete) {
+    location.href = `#reserva/${idPaquete}`;
+}
+window.reservarPaquete = reservarPaquete;
+
+
+
+
 // Funciones globales para los botones
 window.verDetallesPaquete = function(paqueteId) {
     console.log("Ver detalles del paquete:", paqueteId);
@@ -220,8 +226,3 @@ window.verDetallesPaquete = function(paqueteId) {
     alert(`Mostrando detalles del paquete ${paqueteId}`);
 };
 
-window.reservarPaquete = function(paqueteId) {
-    console.log("Reservar paquete:", paqueteId);
-    // Aquí puedes agregar la lógica para reservar
-    alert(`Iniciando proceso de reserva para paquete ${paqueteId}`);
-};
