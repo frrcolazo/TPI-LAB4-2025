@@ -113,7 +113,12 @@ async function borrar(id) {
     let urlDelete = url + "/" + id;
     return await fetch(urlDelete, {
         method: 'DELETE'
-    }).then(respuesta => respuesta.json());
+    }).then(respuesta => {
+        if (!respuesta.ok) {
+            alert("No fue posible eliminar el usuario");
+        }
+        return respuesta.json();
+    });
 }
 
 export const usuariosServices = {

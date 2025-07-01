@@ -62,7 +62,12 @@ async function borrar(id) {
     return await fetch(urlPut, {
         method: 'DELETE'
     })
-        .then(respuesta => respuesta.json());
+        .then(respuesta => {
+            if (!respuesta.ok) {
+                alert("No fue posible eliminar el paquete");
+            }
+            return respuesta.json();
+        });
 }
 
 async function listarPorDestino(nombre_destino) {

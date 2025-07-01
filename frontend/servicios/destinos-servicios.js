@@ -61,7 +61,12 @@ async function borrar(id){
     return await fetch(urlPut, {
             method: 'DELETE'
        })
-       .then(respuesta => respuesta.json());
+       .then(respuesta => {
+        if (!respuesta.ok) {
+            alert("No fue posible eliminar el destino");
+        }
+        return respuesta.json();
+    });
 }
 
 export const destinosServices = {
