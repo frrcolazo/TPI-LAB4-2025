@@ -89,7 +89,7 @@ export async function mostrarHistorial() {
     seccionHistorial.innerHTML = `
       <h1 class="titulo-historial">HISTORIAL DE VIAJES</h1>
       <div class="error-historial">
-        <p>Hubo un problema al cargar el historial: ${error.message}</p>
+        <p>No has iniciado sesión aún</p>
       </div>
     `;
   }

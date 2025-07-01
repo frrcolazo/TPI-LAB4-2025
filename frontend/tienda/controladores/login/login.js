@@ -2,8 +2,8 @@ import { usuariosServices } from "../../../servicios/usuarios-servicios.js";
 import { mostrarSolo } from "../../utils/utils.js";
 
 /**1- Se debe asignar a la siguiente constante todo el código correspondiente al componente de login (/asset/modulos/login.html)  */
-const htmlLogin=
-`<div class="contenedorLogin">
+const htmlLogin =
+    `<div class="contenedorLogin">
     <div class="cajaLogin">
         <p >Iniciar sesión</p>
         <form  class="formLogin" >
@@ -39,42 +39,42 @@ var inputRepetirPass;
 var inputNombre;
 var inputApellido;
 
-export async function login(){
+export async function login() {
     mostrarSolo("seccionLogin");
     crearFormulario();
     formulario.addEventListener("submit", ingresar);
-}  
+}
 
-export async function register(){
+export async function register() {
     mostrarSolo("seccionLogin");
     crearFormulario(true);
     formulario.addEventListener("submit", registrarUsuario);
-}  
+}
 
-function crearFormulario(registrar){
+function crearFormulario(registrar) {
     let d = document;
     let seccionLogin = d.querySelector(".seccionLogin");
     seccionLogin.innerHTML = htmlLogin;
-    inputEmail= d.getElementById("loginEmail");
-    inputPassword= d.getElementById("loginPassword");
+    inputEmail = d.getElementById("loginEmail");
+    inputPassword = d.getElementById("loginPassword");
     inputRepetirPass = d.getElementById("reLoginPassword");
     inputNombre = d.getElementById("regNombre");
     inputApellido = d.getElementById("regApellido");
-    
-    if (! registrar ){        
+
+    if (!registrar) {
         inputRepetirPass.outerHTML = "";
         inputNombre.outerHTML = "";
         inputApellido.outerHTML = "";
-    }else{
-        inputRepetirPass.style.display ="block";
-        inputNombre.style.display ="block";
-        inputApellido.style.display ="block";
+    } else {
+        inputRepetirPass.style.display = "block";
+        inputNombre.style.display = "block";
+        inputApellido.style.display = "block";
         d.querySelector(".cajaLogin p").innerHTML = "Registar usuario"
     }
     formulario = seccionLogin.querySelector(".formLogin");
-} 
+}
 
-async function  ingresar(e){
+async function ingresar(e) {
     e.preventDefault();
     let idUsuario = await usuarioExiste();
 
@@ -92,13 +92,13 @@ async function  ingresar(e){
     }
 }
 
-async function  registrarUsuario(e){
+async function registrarUsuario(e) {
     e.preventDefault();
-    if( inputPassword.value === inputRepetirPass.value) {
-       await usuariosServices.crear(inputApellido.value, inputNombre.value, inputEmail.value, inputPassword.value, "Cliente");
-       mostrarMensaje('Email registrado.') 
-       window.location.href = "#login" ; 
-    }else{
+    if (inputPassword.value === inputRepetirPass.value) {
+        await usuariosServices.crear(inputApellido.value, inputNombre.value, inputEmail.value, inputPassword.value, "Cliente");
+        mostrarMensaje('Email registrado.')
+        window.location.href = "#login";
+    } else {
         mostrarMensaje('Las contraseñas no son iguales');
     }
 }
@@ -106,22 +106,22 @@ async function  registrarUsuario(e){
 async function usuarioExiste() {
     let existeUsuario;
     let idUsuario;
-    await usuariosServices.login(inputEmail.value, inputPassword.value) 
-        .then(respuesta =>{
-            if (respuesta.accesoOk == true){
+    await usuariosServices.login(inputEmail.value, inputPassword.value)
+        .then(respuesta => {
+            if (respuesta.accesoOk == true) {
                 existeUsuario = true
-                let cad=  respuesta.token
+                let cad = respuesta.token
                 localStorage.setItem('token', cad)
                 idUsuario = respuesta.usuario.id
             }
-            else{
-              existeUsuario = false  
-            }   
+            else {
+                existeUsuario = false
+            }
         })
     if (!existeUsuario) {
-       return false;
+        return false;
     } else {
-       return idUsuario; 
+        return idUsuario;
     }
 }
 
@@ -164,16 +164,15 @@ function mostrarMensaje(msj) {
 }
 
 export function setUsuarioAutenticado(booleano, idUsuario) {
-    let email="";
+    let email = "";
     if (inputEmail)
-       email = inputEmail.value
+        email = inputEmail.value
     sessionStorage.setItem('autenticado', booleano);
     sessionStorage.setItem('idUsuario', idUsuario);
     sessionStorage.setItem('email', email);
 }
-
 export function getUsuarioAutenticado() {
-    var session  = new Object();
+    var session = new Object();
     session.autenticado = sessionStorage.getItem('autenticado') === "true";
     session.idUsuario = sessionStorage.getItem('idUsuario')
     session.email = sessionStorage.getItem('email');

@@ -36,6 +36,12 @@ async function cargarReservasEnCarrusel() {
     const reservas = await reservasServices.listarPorUsuarioLogeado()
     const carruselReservas = document.querySelector(".carrusel-reservas");
     console.log(reservas, carruselReservas)
+    if (!Array.isArray(reservas)) {
+        carruselReservas.innerHTML = `<div class="mensaje-vacio">
+        No has iniciado sesión aun
+        </div>`
+        return
+    }
     if (reservas.length === 0) {
         carruselReservas.innerHTML = `<div class="mensaje-vacio">
         No tienes reservas activas por el momento.
