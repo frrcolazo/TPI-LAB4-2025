@@ -21,6 +21,6 @@ class JWTBearer(HTTPBearer):
         usuariosDb : UsuarioModel= UsuariosService(db).get_usuarios()
         for item in usuariosDb:
              if item.correo == data['email']:
-               return
+               return auth.credentials
         raise HTTPException(status_code=403, detail="Credenciales son invalidas")
 
