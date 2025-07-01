@@ -1,15 +1,9 @@
 const url = "http://127.0.0.1:8000/reservas";
 
 const getAuthHeaders = () => ({
-<<<<<<< HEAD
     "accept": "application/json",
     "Content-Type": "application/json",
     "Authorization": "Bearer " + localStorage.getItem('token')
-=======
-  "accept": "application/json",
-  "Content-Type": "application/json",
-  "Authorization": "Bearer " + localStorage.getItem('token')
->>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf
 });
 
 async function listar(id) {
@@ -30,7 +24,6 @@ async function listar(id) {
     });
 }
 
-<<<<<<< HEAD
 // Cambiado: ahora recibe un objeto reserva
 async function crear(reserva) {
     return await fetch(url, {
@@ -38,25 +31,10 @@ async function crear(reserva) {
         headers: getAuthHeaders(),
         body: JSON.stringify(reserva)
     }).then(respuesta => respuesta.json());
-=======
-async function crear(idUsuario, idPaquete, cantidad_personas, fecha_reserva, estado) {
-  return await fetch(url, {
-    method: 'POST',
-    headers: getAuthHeaders(),
-    body: JSON.stringify({
-      idUsuario,
-      idPaquete,
-      cantidad_personas,
-      fecha_reserva,
-      estado
-    })
-  }).then(respuesta => respuesta.json());
->>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf
 }
 
 // Para editar tienes que enviar el objeto completo; aquí solo ejemplo con estado
 async function editar(id, reservaCompleta) {
-<<<<<<< HEAD
     let urlPut = `${url}/${id}`;
     return await fetch(urlPut, {
         method: 'PUT',
@@ -139,36 +117,3 @@ export const reservasServices = {
     getReservasActivasPorUsuario
 };
 //01-07-2025
-=======
-  let urlPut = `${url}/${id}`;
-  return await fetch(urlPut, {
-    method: 'PUT',
-    headers: getAuthHeaders(),
-    body: JSON.stringify(reservaCompleta)
-  }).then(respuesta => respuesta.json());
-}
-
-async function borrar(id) {
-  let urlDelete = `${url}/${id}`;
-  return await fetch(urlDelete, {
-    method: 'DELETE',
-    headers: getAuthHeaders()
-  }).then(respuesta => respuesta.json());
-}
-
-async function listarPorUsuario(idUsuario) {
-  let urlUsuario = `${url}/usuario/${idUsuario}`;
-  return await fetch(urlUsuario, {
-    method: 'GET',
-    headers: getAuthHeaders()
-  }).then(respuesta => respuesta.json());
-}
-
-export const reservasServices = {
-  listar,
-  crear,
-  editar,
-  borrar,
-  listarPorUsuario
-};
->>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf

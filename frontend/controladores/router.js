@@ -17,25 +17,11 @@ export function Router() {
 
     if (hash === '#/usuarios') {
         Usuarios();
-<<<<<<< HEAD
     } else if (hash === '#/destinos') {
         Destinos();
     } else if (hash === '#/reservas') {
         Reservas();
     } else if (hash === '#/register') {
-=======
-    } else if(hash === '#/categorias'){
-        Categorias();
-    // } else if(hash === '#/productos'){
-    //     Productos();
-    } else if(hash === '#/destinos'){
-        Destinos();
-    // } else if(hash === '#/ventas'){
-    //     Ventas();
-    }else if(hash==='#/reservas'){
-        Reservas();
-    } else if(hash === '#/register'){         
->>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf
         console.log('Register route called');
         Registro();
     } else if ((hash === '#/home') || (hash === '') || (hash === '#/')) {

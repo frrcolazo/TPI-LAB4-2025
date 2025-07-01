@@ -44,7 +44,6 @@
     background-color: #fffcc0;
 }
 
-<<<<<<< HEAD
 /* Footer por defecto (para sección de inicio) */
 footer {
     text-align: center;
@@ -84,16 +83,6 @@ body:has(.seccionDestinos:not([style*="display: none"])) footer {
     background: transparent !important;
     bottom: 10px !important;
     margin-top: 0 !important;
-=======
-footer {
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
-    text-align: center;
-    color: white;
-    font-size: 0.9rem;
-    text-shadow: 1px 1px 2px black;
->>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf
 }
 
 .titulo {

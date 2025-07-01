@@ -1,5 +1,4 @@
 import { reservasServices } from "../../servicios/reservas-servicios.js";
-<<<<<<< HEAD
 import { newRegister } from "./new.js";
 import { editRegister } from "./new.js";
 
@@ -53,54 +52,12 @@ export async function Reservas() {
                         <i class='fas fa-trash'></i>
                     </a>
                 </div>`;
-=======
-
-const htmlReservas = `
-<div class="card">
-   <div class="card-header">
-       <h3 class="card-title">Reservas</h3>
-   </div>
-   <div class="card-body">            
-       <table id="reservasTable" class="table table-bordered table-striped" width="100%">
-           <thead>
-               <tr>
-                   <th>#</th>
-                   <th>ID Usuario</th>
-                   <th>ID Paquete</th>
-                   <th>Personas</th>
-                   <th>Fecha</th>
-                   <th>Estado</th>
-               </tr>
-           </thead>
-       </table>
-   </div>
-</div>`;
-
-export async function Reservas() {
-    const d = document;
-    const spinner = document.getElementById("spinner");
-    d.querySelector('.contenidoTitulo').innerHTML = 'Reservas';
-    d.querySelector('.rutaMenu').innerHTML = "Reservas";
-    d.querySelector('.rutaMenu').setAttribute('href', "#/reservas");
-    const cP = d.getElementById('contenidoPrincipal');
-
-    spinner.classList.add("d-flex");
-    try {
-        const res = await reservasServices.listar();
-
-        // Añadimos un campo para checkbox con estado
-        res.forEach(r => {
-            r.action = `<input type="checkbox" class="ckboxEstado" data-idreserva="${r.id}" ${r.estado ? "checked" : ""}>`;
->>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf
         });
 
         cP.innerHTML = htmlReservas;
         llenarTabla(res);
-<<<<<<< HEAD
         document.querySelector(".btnAgregarReserva").addEventListener("click", agregar);
 
-=======
->>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf
     } catch (error) {
         console.error("Error cargando reservas:", error);
         cP.innerHTML = `<div class="alert alert-danger">Error cargando reservas.</div>`;
@@ -109,7 +66,6 @@ export async function Reservas() {
     }
 }
 
-<<<<<<< HEAD
 function agregar() {
     newRegister();
 }
@@ -157,32 +113,11 @@ function chkBoxChange(event) {
     }).catch(err => {
         console.error("Error obteniendo reserva:", err);
         alert("No se pudo obtener la reserva");
-=======
-function chkBoxChange(event) {
-    const id = event.target.getAttribute('data-idreserva');
-    const estado = event.target.checked;
-
-    // Obtener la reserva completa para enviar el objeto actualizado
-    reservasServices.listar(id).then(reservaCompleta => {
-        reservaCompleta.estado = estado;
-        reservasServices.editar(id, reservaCompleta)
-            .catch(err => {
-                console.error("Error actualizando estado:", err);
-                alert("No se pudo actualizar el estado");
-                // opcional: revertir checkbox
-                event.target.checked = !estado;
-            });
-    }).catch(err => {
-        console.error("Error obteniendo reserva:", err);
-        alert("No se pudo obtener la reserva");
-        // revertir checkbox
->>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf
         event.target.checked = !estado;
     });
 }
 
 function enlazarEventos() {
-<<<<<<< HEAD
     const d = document;
     const editarBtns = d.querySelectorAll(".btnEditarReserva");
     const borrarBtns = d.querySelectorAll(".btnBorrarReserva");
@@ -210,26 +145,6 @@ function llenarTabla(res) {
         deferRender: true,
         retrive: true,
         processing: true,
-=======
-    document.querySelectorAll(".ckboxEstado").forEach(chk => {
-        chk.addEventListener("change", chkBoxChange);
-    });
-}
-
-function llenarTabla(res) {
-    new DataTable('#reservasTable', {
-        responsive: true,
-        data: res,
-        columns: [
-            { data: 'id' },
-            { data: 'idUsuario' },
-            { data: 'idPaquete' },
-            { data: 'cantidad_personas' },
-            { data: 'fecha_reserva' },
-            { data: 'action', orderable: false }
-        ],
-        fnDrawCallback: enlazarEventos,
->>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf
         language: {
             sProcessing: "Procesando...",
             sLengthMenu: "Mostrar _MENU_ registros",
@@ -244,18 +159,12 @@ function llenarTabla(res) {
                 sLast: "Último",
                 sNext: "Siguiente",
                 sPrevious: "Anterior"
-<<<<<<< HEAD
             },
             oAria: {
                 sSortAscending: ": Activar para ordenar ascendente",
                 sSortDescending: ": Activar para ordenar descendente"
-=======
->>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf
             }
         }
     });
 }
-<<<<<<< HEAD
 //01-07-2024 
-=======
->>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf

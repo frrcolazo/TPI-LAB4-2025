@@ -54,18 +54,6 @@ export async function register(){
 function crearFormulario(registrar){
     let d = document;
     let seccionLogin = d.querySelector(".seccionLogin");
-<<<<<<< HEAD
-=======
-    let carrusel = d.querySelector(".carrusel");
-    carrusel.innerHTML = '';
-    let seccionPaquetes = d.querySelector(".seccionPaquetes"); // <--- corregido
-    seccionPaquetes.innerHTML = '';
-    let vistaProducto = d.querySelector(".vistaPaquete");
-    vistaProducto.innerHTML = '';
-    let seccionInicio = d.querySelector(".seccionInicio"); // <-- AGREGADO
-    seccionInicio.innerHTML = ''; // <-- AGREGADO
-    
->>>>>>> 00142904fbea67cc287c098406e1b8678ca124cf
     seccionLogin.innerHTML = htmlLogin;
     inputEmail= d.getElementById("loginEmail");
     inputPassword= d.getElementById("loginPassword");
