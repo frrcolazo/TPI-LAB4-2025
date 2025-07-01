@@ -21,8 +21,8 @@ export async function mostrarHistorial() {
   if (!seccionHistorial) return;
 
   seccionHistorial.innerHTML = `
-    <h1 class="titulo-historial">VIAJES ACTIVOS</h1>
-    <div class="loading">Cargando viajes activos...</div>
+    <h1 class="titulo-historial">HISTORIAL DE VIAJES</h1>
+    <div class="loading">Cargando historial de viajes...</div>
   `;
 
   try {
@@ -33,9 +33,8 @@ export async function mostrarHistorial() {
     const usuario = usuarios.find(u => u.correo === email);
     if (!usuario) throw new Error("Usuario no encontrado");
 
-    // Acá hago la llamada directa al endpoint /reservas/usuario/{idUsuario}/resumen
-    const urlResumen = `http://127.0.0.1:8000/reservas/usuario/${usuario.id}/resumen`;
-    const res = await fetch(urlResumen, {
+    const urlHistorial = `http://127.0.0.1:8000/reservas/usuario/${usuario.id}/resumen`;
+    const res = await fetch(urlHistorial, {
       headers: {
         "Accept": "application/json",
         "Authorization": "Bearer " + localStorage.getItem("token"),
@@ -47,19 +46,27 @@ export async function mostrarHistorial() {
       throw new Error(`Error HTTP ${res.status}: ${errorText}`);
     }
 
-    const reservasResumen = await res.json();
+    const reservas = await res.json();
+    console.log("RESERVAS ORIGINALES:", reservas);
 
-    if (!reservasResumen || reservasResumen.length === 0) {
+    // 🔍 Filtrar solo las reservas que ya finalizaron
+    const hoy = new Date();
+    const reservasPasadas = reservas.filter(reserva => {
+      const fechaFin = new Date(reserva.fecha_fin);
+      return fechaFin < hoy;
+    });
+
+    if (reservasPasadas.length === 0) {
       seccionHistorial.innerHTML = `
-        <h1 class="titulo-historial">VIAJES ACTIVOS</h1>
+        <h1 class="titulo-historial">HISTORIAL DE VIAJES</h1>
         <div class="sin-viajes">
-          <p>No hay viajes activos en este momento.</p>
+          <p>No hay viajes pasados registrados en tu historial.</p>
         </div>
       `;
       return;
     }
 
-    const activosHTML = reservasResumen.map(reserva => `
+    const historialHTML = reservasPasadas.map(reserva => `
       <div class="item-historial">
         <h3>${reserva.destino_nombre || "Destino desconocido"}</h3>
         <p><strong>Paquete:</strong> ${reserva.paquete_nombre || "N/A"}</p>
@@ -71,18 +78,18 @@ export async function mostrarHistorial() {
     `).join("");
 
     seccionHistorial.innerHTML = `
-      <h1 class="titulo-historial">VIAJES ACTIVOS</h1>
+      <h1 class="titulo-historial">HISTORIAL DE VIAJES</h1>
       <div class="carrusel-historial">
-        ${activosHTML}
+        ${historialHTML}
       </div>
     `;
 
   } catch (error) {
-    console.error("Error al mostrar viajes activos:", error);
+    console.error("Error al mostrar historial de viajes:", error);
     seccionHistorial.innerHTML = `
-      <h1 class="titulo-historial">VIAJES ACTIVOS</h1>
+      <h1 class="titulo-historial">HISTORIAL DE VIAJES</h1>
       <div class="error-historial">
-        <p>Hubo un problema al cargar los viajes activos: ${error.message}</p>
+        <p>Hubo un problema al cargar el historial: ${error.message}</p>
       </div>
     `;
   }
