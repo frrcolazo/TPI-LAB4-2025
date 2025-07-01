@@ -6,6 +6,8 @@ from config.database import get_database_session
 from models.reservas import Reservas as ReservasModel
 from fastapi.encoders import jsonable_encoder
 from middlewares.jwt_bearer import JWTBearer
+from routers.usuarios import get_user_actual
+from schemas.usuarios import Usuarios
 from services.reservas import ReservasService
 import os
 import shutil
@@ -73,6 +75,16 @@ def get_reservas_by_usuario(idUsuario: int = Path(ge=1, le=2000), db=Depends(get
     result = ReservasService(db).get_reservas_by_usuario(idUsuario)
     if not result:
         raise HTTPException(status_code=404, detail="No encontrado")
+    reservas_schemas = [Reservas.model_validate(reserva, from_attributes=True) for reserva in result]
+
+    return reservas_schemas
+
+# --- Obtener reservas por usuario ---
+@reservas_router.get('/reservas/propias/activas', tags=['Reservas'], response_model=List[Reservas], status_code=200)
+def get_reservas_by_usuario_activo(usuario: Usuarios = Depends(get_user_actual), db=Depends(get_database_session)) -> List[Reservas]:
+    if not usuario.id:
+        raise HTTPException(status_code=404, detail="Usuario no valido")
+    result = ReservasService(db).get_reservas_activas_by_usuario(usuario.id)
     reservas_schemas = [Reservas.model_validate(reserva, from_attributes=True) for reserva in result]
 
     return reservas_schemas
