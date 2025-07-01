@@ -90,6 +90,17 @@ def get_reservas_by_usuario_activo(usuario: Usuarios = Depends(get_user_actual),
 
     return reservas_schemas
 
+@reservas_router.get('/reservas/propias/activas/resumen', tags=['Reservas'], status_code=200)
+def get_resumen_reservas_usuario_activo(
+    usuario: Usuarios = Depends(get_user_actual),
+    db=Depends(get_database_session)
+):
+    if not usuario.id:
+        raise HTTPException(status_code=404, detail="Usuario no valido")
+    result = get_resumen_reservas_usuario(usuario.id, db)
+    
+    return result
+
 @reservas_router.get('/reservas/usuario/{idUsuario}/resumen', tags=['Reservas'], status_code=200)
 def get_resumen_reservas_usuario(
     idUsuario: int = Path(ge=1, le=2000),

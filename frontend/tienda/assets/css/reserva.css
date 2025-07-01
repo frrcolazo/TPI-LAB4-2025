@@ -48,14 +48,66 @@
 
 .item-reserva {
     width: 320px;
-    height: 320px;
+    min-height: 360px;
     background: #a3a395;
     border-radius: 12px;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5rem;
     color: #fff;
-    font-size: 1.4rem;
-    text-align: center;
+    font-size: 1.1rem;
+    text-align: left;
     box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    font-family: 'Georgia', serif;
+    backdrop-filter: blur(2px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Encabezado (nombre completo) */
+.item-reserva .paquete {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 0.10rem;
+    padding-top: 0;
+    padding-top: 0;
+    margin-top: 0;
+    color: #f0f8a1;
+    text-align: center;
+    text-shadow: 1px 1px 2px #333;
+}
+
+/* Contenedor de info */
+.item-reserva .detalle {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding-bottom: 4.5rem;
+}
+
+/* Etiqueta e info */
+.item-reserva .detalle span {
+    display: block;
+}
+
+.item-reserva .detalle span strong {
+    color: #ffe;
+    font-weight: 600;
+}
+
+.mensaje-vacio {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px dashed #f0f8a1;
+    border-radius: 12px;
+    padding: 2rem;
+    font-size: 1.5rem;
+    color: #f0f8a1;
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    margin-top: 3rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    backdrop-filter: blur(2px);
+    font-family: 'Georgia', serif;
+    text-shadow: 1px 1px 4px #222;
 }
