@@ -67,7 +67,10 @@ def delete_reservas(id: int, db=Depends(get_database_session)) -> Reservas:
         result = ReservasService(db).delete_reservas(id)
     except ValueError:
         raise HTTPException(status_code=404, detail="No se encontró")
-    return Reservas.model_validate(result)
+    return JSONResponse(
+        status_code=200, content={"message": "Se ha eliminado la reserva"}
+    )
+
 
 
 # --- Obtener reservas por usuario ---
