@@ -3,13 +3,10 @@ import { mostrarSolo } from "../../utils/utils.js";
 import { destinosServices } from "../../../servicios/destinos-servicios.js";
 
 export async function vistaPaquetes(idDestino) {
-    console.log("🚀 Cargando paquetes para destino ID:", idDestino);
     mostrarSolo("vistaPaquetes");
     
-    const d = document;
-    const vista = d.querySelector(".vistaPaquetes");
+    const vista = document.querySelector(".vistaPaquetes");
     
-    // Mostrar loading mientras se cargan los datos
     vista.innerHTML = `
         <div class="loading-container">
             <div class="loading-spinner"></div>
@@ -34,21 +31,13 @@ export async function vistaPaquetes(idDestino) {
             destinosServices.listar()
         ]);
 
-        console.log("Paquetes totales recibidos:", paquetesTodos);
-        console.log("Destinos recibidos:", destinos);
-
         const paquetes = paquetesTodos
             .filter(paquete => Number(paquete.destino_id) === Number(idDestino))
-            .map(paquete => {
-                const destino = destinos.find(d => d.id === paquete.destino_id);
-                return {
-                    ...paquete,
-                    destino
-                };
-            });
+            .map(paquete => ({
+                ...paquete,
+                destino: destinos.find(d => d.id === paquete.destino_id)
+            }));
 
-        console.log(`Paquetes filtrados y enriquecidos para destino_id ${idDestino}:`, paquetes);
-        
         if (!paquetes || paquetes.length === 0) {
             vista.innerHTML = `
                 <div class="no-paquetes-container">
@@ -65,7 +54,6 @@ export async function vistaPaquetes(idDestino) {
         renderizarPaquetes(paquetes, vista);
         
     } catch (error) {
-        console.error("Error al cargar paquetes:", error);
         vista.innerHTML = `
             <div class="error-container">
                 <h2>❌ Error de conexión</h2>
@@ -89,14 +77,20 @@ function renderizarPaquetes(paquetes, vista) {
     `;
 
     paquetes.forEach((paquete, index) => {
-        const imagen = obtenerImagenDestino(paquete.destino_id);
+        const rutaImagen = paquete.destino?.imagen_url ? `assets/img/${paquete.destino.imagen_url}` : null;
         const diasDuracion = calcularDias(paquete.fecha_inicio, paquete.fecha_fin);
         const disponibilidad = obtenerEstadoDisponibilidad(paquete.cupo);
         const precioFormateado = formatearPrecio(paquete.precio);
         
         html += `
             <div class="paquete-detalle" data-aos="fade-up" data-aos-delay="${index * 100}">
-                <div class="paquete-imagen" style="background-image: url('${imagen}')">
+                <div class="paquete-imagen" ${rutaImagen ? `style="background-image: url('${rutaImagen}')"` : ''}>
+                    ${!rutaImagen ? `
+                        <div class="placeholder-paquete">
+                            <span class="placeholder-icono">🖼️</span>
+                            <p>Imagen no disponible</p>
+                        </div>
+                    ` : ''}
                     <div class="paquete-badge ${disponibilidad.clase}">${disponibilidad.texto}</div>
                     <div class="paquete-duracion">${diasDuracion} días</div>
                 </div>
@@ -156,18 +150,11 @@ function renderizarPaquetes(paquetes, vista) {
 function formatearFecha(fecha) {
     if (!fecha) return "Sin fecha";
     const f = new Date(fecha);
-    const opciones = { 
-        day: '2-digit', 
-        month: '2-digit', 
-        year: 'numeric' 
-    };
-    return f.toLocaleDateString('es-AR', opciones);
+    return f.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
 function formatearRangoFechas(fechaInicio, fechaFin) {
-    const inicio = formatearFecha(fechaInicio);
-    const fin = formatearFecha(fechaFin);
-    return `${inicio} - ${fin}`;
+    return `${formatearFecha(fechaInicio)} - ${formatearFecha(fechaFin)}`;
 }
 
 function formatearPrecio(precio) {
@@ -182,47 +169,20 @@ function calcularDias(fechaInicio, fechaFin) {
     if (!fechaInicio || !fechaFin) return 0;
     const inicio = new Date(fechaInicio);
     const fin = new Date(fechaFin);
-    const diferencia = fin - inicio;
-    return Math.ceil(diferencia / (1000 * 60 * 60 * 24)) + 1;
+    return Math.ceil((fin - inicio) / (1000 * 60 * 60 * 24)) + 1;
 }
 
 function obtenerEstadoDisponibilidad(cupo) {
-    if (cupo === 0) {
-        return { clase: 'agotado', texto: 'Agotado' };
-    } else if (cupo <= 3) {
-        return { clase: 'ultimos', texto: 'Últimos lugares' };
-    } else {
-        return { clase: 'disponible', texto: 'Disponible' };
-    }
-}
-
-function obtenerImagenDestino(destino_id) {
-    const imagenes = {
-        1: "assets/img/mar_del_plata.jpg",
-        2: "assets/img/punta_cana.jpg",
-        3: "assets/img/buzios.jpg",
-        4: "assets/img/bariloche.jpg",
-        5: "assets/img/san_martin.jpg",
-        6: "assets/img/ushuaia.jpg",
-        7: "assets/img/madrid.jpg",
-        8: "assets/img/nueva_york.jpg",
-        9: "assets/img/cordoba.jpg"
-    };
-    return imagenes[destino_id] || "assets/img/default.jpg";
+    if (cupo === 0) return { clase: 'agotado', texto: 'Agotado' };
+    if (cupo <= 3) return { clase: 'ultimos', texto: 'Últimos lugares' };
+    return { clase: 'disponible', texto: 'Disponible' };
 }
 
 export function reservarPaquete(idPaquete) {
     location.href = `#reserva/${idPaquete}`;
 }
+
 window.reservarPaquete = reservarPaquete;
-
-
-
-
-// Funciones globales para los botones
 window.verDetallesPaquete = function(paqueteId) {
-    console.log("Ver detalles del paquete:", paqueteId);
-    // Aquí puedes agregar la lógica para mostrar detalles
     alert(`Mostrando detalles del paquete ${paqueteId}`);
 };
-

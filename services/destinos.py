@@ -26,19 +26,27 @@ class DestinosService():
             query = query.filter(DestinosModel.pais.ilike(f"%{pais}%"))
         return query.all()
     
+    VALID_CATEGORIAS = {"playa", "nieve", "ciudad"}
     def create_destino(self, destino: Destinos):
+        if destino.categoria not in self.VALID_CATEGORIAS:
+            raise ValueError("Categoría no válida.")
+        
         new_destino = DestinosModel(**destino.model_dump())
         self.db.add(new_destino)
         self.db.commit()
         return
+
     
     def update_destino(self, id: int, data: Destinos):
+        if data.categoria not in self.VALID_CATEGORIAS:
+            raise ValueError("Categoría no válida.")
         destino = self.db.query(DestinosModel).filter(DestinosModel.id == id).first()
         destino.nombre = data.nombre
         destino.descripcion = data.descripcion
         destino.pais = data.pais
+        destino.categoria = data.categoria
+        destino.imagen_url = data.imagen_url
         self.db.commit()
-        return
     
     def delete_destino(self, id: int):
         self.db.query(DestinosModel).filter(DestinosModel.id == id).delete()

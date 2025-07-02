@@ -18,6 +18,8 @@ const htmlDestinos =
            <th>Nombre</th>
            <th>Descripción</th>
            <th>País</th>
+           <th>Categoría</th>       
+           <th>Imagen</th>
            <th>Acciones</th>
            </tr>
        </thead>
@@ -99,12 +101,25 @@ function llenarTabla(res){
             { data: 'nombre' },
             { data: 'descripcion' },
             { data: 'pais' },
-            { data: 'action', "orderable":false }
+            { data: 'categoria' }, // Nueva columna categoría
+            { 
+              data: 'imagen_url',   // Nueva columna imagen
+              render: function(data, type, row) {
+                  if(data) {
+                      return `<img src="./assets/img/${data}" alt="${row.nombre}" style="width:60px; height:auto;">`;
+                  } else {
+                      return 'Sin imagen';
+                  }
+              },
+              orderable: false
+            },
+            { data: 'action', orderable:false }
         ],
         fnDrawCallback: function ( oSettings) {
-            enlazarEventos( oSettings); },
+            enlazarEventos( oSettings);
+        },
         deferRender: true,
-        retrive: true,
+        retrieve: true,
         processing: true,
         language: {
             sProcessing:     "Procesando...",

@@ -18,10 +18,6 @@ export async function vistaReserva(idPaquete) {
         return;
     }
 
-    // ... lo demás queda igual
-
-
-    // Mostrar loading mientras carga
     vista.innerHTML = `<p>Cargando información del paquete...</p>`;
 
     try {
@@ -39,7 +35,6 @@ export async function vistaReserva(idPaquete) {
             return;
         }
 
-        // Mostrar formulario para reservar
         vista.innerHTML = `
             <div class="reserva-formulario">
                 <h2>Reservar paquete: ${paquete.nombre}</h2>
@@ -79,7 +74,6 @@ export async function vistaReserva(idPaquete) {
         });
 
     } catch (error) {
-        console.error("Error al cargar paquete:", error);
         vista.innerHTML = `
             <div class="error-container">
                 <h2>❌ Error al cargar datos</h2>
@@ -93,18 +87,15 @@ export async function vistaReserva(idPaquete) {
 function formatearFecha(fecha) {
     if (!fecha) return "Sin fecha";
     const f = new Date(fecha);
-    const opciones = { 
+    return f.toLocaleDateString('es-AR', { 
         day: '2-digit', 
         month: '2-digit', 
         year: 'numeric' 
-    };
-    return f.toLocaleDateString('es-AR', opciones);
+    });
 }
 
 function formatearRangoFechas(fechaInicio, fechaFin) {
-    const inicio = formatearFecha(fechaInicio);
-    const fin = formatearFecha(fechaFin);
-    return `${inicio} - ${fin}`;
+    return `${formatearFecha(fechaInicio)} - ${formatearFecha(fechaFin)}`;
 }
 
 function formatearPrecio(precio) {
@@ -151,12 +142,8 @@ async function confirmarReserva(idPaquete, cantidad_personas) {
             return;
         }
 
-        // Obtener fecha actual en formato YYYY-MM-DD
         const hoy = new Date();
-        const yyyy = hoy.getFullYear();
-        const mm = String(hoy.getMonth() + 1).padStart(2, '0');
-        const dd = String(hoy.getDate()).padStart(2, '0');
-        const fechaReserva = `${yyyy}-${mm}-${dd}`;
+        const fechaReserva = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
 
         const reservaData = {
             idUsuario: usuario.id,
@@ -176,28 +163,24 @@ async function confirmarReserva(idPaquete, cantidad_personas) {
 
         if (res.ok) {
             alert("✅ Reserva realizada con éxito. ¡Gracias por elegirnos!");
-            // Opcional: volver a paquetes o limpiar localStorage
             localStorage.removeItem("paqueteSeleccionado");
             history.back();
         } else {
             const error = await res.json();
             let mensajeError = "Error desconocido";
+            
             if (error.detail) {
-                if (Array.isArray(error.detail)) {
-                    mensajeError = error.detail.map(e =>
-                        typeof e === 'object' ? JSON.stringify(e) : e
-                    ).join(', ');
-                } else {
-                    mensajeError = error.detail;
-                }
+                mensajeError = Array.isArray(error.detail) 
+                    ? error.detail.map(e => typeof e === 'object' ? JSON.stringify(e) : e).join(', ')
+                    : error.detail;
             } else if (error.message) {
                 mensajeError = error.message;
             }
+            
             alert("⚠️ Error al reservar: " + mensajeError);
         }
 
     } catch (err) {
-        console.error("Error completo:", err);
         alert("❌ Error al conectar con el servidor: " + err.message);
     }
 }

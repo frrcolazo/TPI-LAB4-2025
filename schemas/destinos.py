@@ -6,16 +6,22 @@ class Destinos(BaseModel):
     nombre: str = Field(min_length=2, max_length=100)
     descripcion: str = Field(min_length=10, max_length=500)
     pais: str = Field(min_length=2, max_length=50)
+    
+    # Nuevos campos
+    categoria: str = Field(..., min_length=3, max_length=20)  # obligatoria
+    imagen_url: Optional[str] = None
 
     class Config:
-        from_attributes = True  # <- Necesario para convertir ORM a JSON
+        from_attributes = True
         json_schema_extra = {
             "examples": [
                 {
                     "id": 1,
                     "nombre": "Buenos Aires",
-                    "descripcion": "Descubre la vibrante capital argentina con sus barrios únicos, espectáculos de tango, asados tradicionales y rica vida cultural",
-                    "pais": "Argentina"
+                    "descripcion": "Capital argentina con historia y cultura.",
+                    "pais": "Argentina",
+                    "categoria": "ciudad",
+                    "imagen_url": "buenos_aires.jpg"
                 }
             ]
         }

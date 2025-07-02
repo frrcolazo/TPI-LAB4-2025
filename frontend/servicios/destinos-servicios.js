@@ -25,22 +25,24 @@ async function obtenerTotalDestinos() {
     .then(respuesta => respuesta.json());
 }
 
-async function crear({ nombre, descripcion, pais }) {
+async function crear({ nombre, descripcion, pais, categoria, imagen_url }) {
     return await fetch(url, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            nombre,
-            descripcion,
-            pais
+        nombre,
+        descripcion,
+        pais,
+        categoria,
+        imagen_url
         })
     })
     .then(respuesta => respuesta.json());
 }
 
-async function editar(id, { nombre, descripcion, pais }) {
+async function editar(id, { nombre, descripcion, pais, categoria, imagen_url }) {
     let urlPut = url + "/" + id;
     return await fetch(urlPut, {
         method: 'PUT',
@@ -48,9 +50,11 @@ async function editar(id, { nombre, descripcion, pais }) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            nombre,
-            descripcion,
-            pais
+        nombre,
+        descripcion,
+        pais,
+        categoria,
+        imagen_url
         })
     })
     .then(respuesta => respuesta.json());
@@ -69,10 +73,22 @@ async function borrar(id){
     });
 }
 
+async function subirImagen(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return await fetch(url + '/upload-image', {
+        method: 'POST',
+        body: formData
+    }).then(respuesta => respuesta.json());
+}
+
+
 export const destinosServices = {
     listar,
     crear,
     editar,
     borrar,
-    obtenerTotalDestinos
+    obtenerTotalDestinos,
+    subirImagen
 }

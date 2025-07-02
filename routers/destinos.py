@@ -9,6 +9,10 @@ from fastapi.encoders import jsonable_encoder
 from middlewares.jwt_bearer import JWTBearer
 from services.destinos import DestinosService
 from schemas.destinos import Destinos
+from fastapi import UploadFile, File
+import shutil
+import os
+
 
 destinos_router = APIRouter()
 @destinos_router.get('/destinos', tags=['Destinos'], response_model=List[Destinos], status_code=200)
@@ -65,3 +69,10 @@ def delete_destino(id: int, db = Depends(get_database_session)) -> dict:
         return JSONResponse(status_code=404, content={"message": "No se encontró"})
     DestinosService(db).delete_destino(id)
     return JSONResponse(status_code=200, content={"message": "Se ha eliminado el destino"})
+
+@destinos_router.post("/destinos/upload-image", tags=["Destinos"])
+def upload_image(file: UploadFile = File(...)):
+    ruta_destino = f"frontend/tienda/assets/img/{file.filename}"
+    with open(ruta_destino, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    return {"message": "Imagen subida correctamente", "imagen_url": file.filename}
